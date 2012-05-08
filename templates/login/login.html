@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Public Login{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row-fluid offset2">
+    <div class="span6">
+      <div class="hero-unit well">
+      {% if user.is_authenticated %}
+	  <h3>Welcome, {{ user.username }}. Thanks for logging in. <a
+href="/logout">Log out</a></h3>
+      {% else %}
+      <h3>Welcome to Kolabria! Please log in to continue.</h3>
+      <form action="" method="post">{% csrf_token %}
+            <br/>
+            {{ form.as_table }}
+            <input type="submit" value="Log in" class="btn btn-primary pull-right">
+        </form>
+        
+        <a href="/register">Not registered?</a> 
+       {% endif %}
+      </div>
+    </div><!--span -->
+  </div><!--row -->
+{% endblock %}

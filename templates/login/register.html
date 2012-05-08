@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Registration{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row-fluid offset2">
+    <div class="span6">
+      <div class="hero-unit well">
+        <h2>Please enter your details</h2>
+        <hr />
+        <form action="" method="post">
+          {% for field in form %}
+          <p>{{ field.label_tag}} {{ field }}</p>
+            
+            
+            {{ field.errors }}
+          {% endfor %}
+        <input type="submit" value="Create account" class="btn btn-primary pull-right">
+        </form>
+      </div><!--hero-->
+    </div><!--span -->
+  </div><!--row -->
+</div><!--container>
+{% endblock %}

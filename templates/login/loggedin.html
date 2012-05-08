@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Logged In{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+	<h3>Welcome, {{ user.username }}.</h3>
+    <p>Thanks for logging in.</p>
+    <p><a href="/logout">Log out</a></p>
+    <br/>
+    <h3>WikiWalls</h3>
+    <ul> 
+      <li>WikiWallName</li>
+      <li>AnotherWikiWallName</li>
+    </ul>
+{% else %} {% comment %}This code should never execute with @login_required{% endcomment %}
+    <p>Warning! You are not authorized to view this page. Please <a
+href="/login/">login.</a></p>
+{% endif %}
+
+{% endblock %}
