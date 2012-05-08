@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Kolabria | Editing Board Details for: {{ wall.name }}</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+      <div class="row-fluid">
+        {% include "includes/focus-sidebar.html" %} 
+        <div class="span8 ">
+            <div class="hero-unit well">
+            {% if messages %}
+              <div class="messages alert alert-block alert-info">
+                <a class="close" data-dismiss="alert">×</a>
+                {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+          <h2>Update Whiteboard Details:</h2>
+          <hr/> 
+          <form action="/walls/update/{{ wall.id }}/" method="post" class="form-horizontal">
+            {{ update_form.as_p}}
+            <button a href="/walls/" class="btn ">Cancel</button>
+            <input type="submit" value="Update Whiteboard" class="btn btn-primary">
+          </form>
+          <br/>
+
+          {% if wall.sharing %}
+          <h3>Sharing WikiWall with the following users:</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>email</th>
+                    <th>Access Level</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ wall.owner.email }}</td>
+                    <td>Owner</td>
+                    <td></td>
+                  </tr>
+             {% for email in wall.sharing %}
+                  <tr>
+                    <td>{{ email }}</td>
+                    <td>Writing</td>
+                    <td>
+                        <form action="/walls/unshare/{{ wall.id }}/" method="post" class="form-horizontal">
+                            <input type="hidden" name="email" value="{{ email }}" />
+                            <input type="submit" value="unshare" class="btn ">
+                        </form>
+                    </td>
+                  </tr>
+             {% endfor %}
+           {% endif %}
+                </tbody>
+               </table>
+
+               <hr>
+
+              <h3>Select one or more appliances on which to publish your WikiWall:</h3>
+                <form action="/walls/publish/{{ wall.id }}/" method="post" class="form-horizontal">
+                 {{ pub_form.as_p }}
+                  <input type="submit" value="Publish" class="btn btn-primary btn-large offset4">
+                </form>
+
+             <h3>Published to the following WikiWall Appliances:</h3>
+             {% for box in boxes %}
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Appliance Name</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ box.name }}</td>
+                    <td>{{ box.location }}</td>
+                    <td>Published</td>
+                    <td>
+                      <form action="/walls/unpublish/{{ wall.id }}/" method="post" class="form-horizontal">
+                          {{ unpub_form.as_p }} 
+                        <input type="hidden" name="box_id" value="{{ box.id }}" />
+                        <button input type="submit" value="Unpublish" class="btn "/>unpublish</button>
+                      </form>
+                        </td>
+                    </tr>
+              {% endfor %}
+                </tbody>
+              </table>
+           </div><!-- hero-unit wll -->
+        </div><!--span -->
+      </div><!--row -->
+
+{% endblock %}

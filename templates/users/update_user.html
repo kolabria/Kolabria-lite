@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} Update Profile Details{% endblock %}
+
+{% block content %}
+	<div class="container-fluid">
+  <div class="row-fluid">
+      {% include "includes/modal-sidebar.html" %}
+      {% if messages %}
+        <div class="span6 offset3">
+          <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+          {% for message in messages %}
+           <p>{{ message }}</p>
+          {% endfor %}
+          </div><!-- alert-block -->
+        </div><!--/span6 -->
+      {% endif %}
+ 
+	<div class="page-header offset2">
+		<h1>Profile Details</h1>
+	</div>
+	
+	<div class="span8">
+		{% include '_form.html' %}
+	</div>
+	
+{% endblock %}

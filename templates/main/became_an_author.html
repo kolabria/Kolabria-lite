@@ -1,0 +1,48 @@
+{% extends 'main.html' %}
+
+{% block title %} Yazar olma isteği {% endblock %}
+
+{% block content %}
+	
+	<div class="page-header">
+		<h1>Yazar olma başvurusu</h1>
+	</div>
+	
+	<div class="span8">
+		
+		İsteğiniz yöneticilere iletilecek, onlar kabul ettiğinde şu yetkilere
+		sahip olacaksınız;
+		
+		<ul>
+			<li>Gönderi ekleyebilme.</li>
+			<li>Gönderilerinizi düzenleyebilme</li>
+			<li>Gönderilerinizi silebilme</li>
+		</ul>
+		{% if user.email %}
+			<div class="alert">
+				<strong>Önemli</strong>
+				Lütfen doğru bir e-posta adresi bildiriniz.<br />
+				Başvuru sonucu sizin e-posta adresinize gönderilecektir.<br />
+				E-posta adresini değiştirmek için lütfen
+				<a href="{% url users:update_users %}">tıklayınız</a>.
+			</div>
+		{% else %}
+			<div class="alert alert-error">
+				Lütfen bir e-posta adresi giriniz. Bu size ulaşmamız için
+				gerekli.<br />
+				
+				<a href="{% url users:update_users %}">Burada</a>
+				e-posta adresinizi değiştirebilirsiniz.
+			</div>
+		{% endif %}
+		
+		<br />
+		{% if user.email %}
+			<fieldset>
+				<legend>Başvuru formu</legend>
+				{% include '_form.html' %}
+			</fieldset>
+		{% endif %}
+	</div>
+	
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+
+{% block title %} Invite Users {% endblock %}
+
+{% block content %}
+	
+	<div class="page-header">
+		<h1>Invite Users</h1>
+	</div>
+		
+	<div class="span8">		
+		<form method="POST" class="form-horizontal">{% csrf_token %}
+			{{ friend_formset.management_form }}
+			
+			{% for form in friend_formset.forms %}
+				<fieldset>
+					{% for field in form %}
+						<div class="control-group{% if field.errors %} error {% endif %}">
+							<label class="control-label" for="id_{{ field.html_name }}">{{ field.label }}</label>
+							<div class="controls">
+								{{ field }}
+								
+								{% if field.errors %}
+									<p class="help-block">{{ field.errors }}</p>
+								{% endif %}
+								
+								{% if field.help_text %}
+									<p class="help-block">{{ field.help_text }}</p>
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}					
+				</fieldset>				
+			{% endfor %}
+			<div class="form-actions">
+				<input type="hidden" name="next" value="{{ next }}" />
+				<button class="btn btn-primary" type="submit">Submit</button>
+				<a onclick="history.back()" class="btn">Back</a>
+			</div>
+		</form>
+	</div>
+	
+{% endblock %}

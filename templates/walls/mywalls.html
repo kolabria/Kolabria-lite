@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Kolabria - My Wikiboards</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+      <div class="row-fluid">
+      {% include "includes/modal-sidebar.html" %}
+      {% if messages %}
+        <div class="span6 offset3">
+          <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+          {% for message in messages %}
+           <p>{{ message }}</p>
+          {% endfor %}
+          </div><!-- alert-block -->
+        </div><!--/span6 -->
+      {% endif %}
+    
+        {% if walls %}
+
+        <div class="span8 ">
+          <h3>Recent Whiteboards:</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Board Name</th>
+                <th>Permissions</th>
+                <th>Action</th>
+                <th>Published to:</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for wall in walls %}
+              <tr id="{{ wall.id }}">
+                <td><a href="/walls/{{ wall.id }}/">{{ wall.name }}</a></td> {% comment %} {% url kolabria.walls.views.view_wall wall.id %} {% endcomment %}
+                <td>owner</td>
+                <td>
+                  <div class="btn-group">
+                    <a class="btn" href="/walls/{{ wall.id }}/">open</a><a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/walls/update/{{ wall.id }}/">edit details</a></li>
+                      <li><a href="#delete-{{ wall.id }}/" data-toggle="modal">delete</a></li>
+                    </ul>
+                  </div>
+                </td>
+                <td>{{ wall.published }}</td>
+            </tr>
+              {% endfor %}
+
+              {% for wall in walls %}
+              <div id="delete-{{ wall.id }}" class="modal hide fade ">
+                <div class="modal-header">
+                  <a class="close" data-dismiss="modal" >&times;</a>
+                  <h3>Delete WikiWall: <strong>{{ wall.name }}</strong></h3>
+                </div>
+                <div class="modal-body">
+                    <form action="/walls/delete/{{ wall.id }}/" method="post" class="form-horizontal">
+                      <h3><strong> Deleting WikiWall ID:</strong> {{ wall.id }}</h3>
+                      <br />
+                      <span class="hide">{{ del_form.as_p }}</span>
+                   {% comment %}<button a href="/walls/" class="btn btn-large offset2">Cancel</button>{% endcomment %}
+                   <button a class="btn btn-large pull-left" data-dismiss="modal">Cancel</button>
+                   <input type="submit" value="Delete WikiWall" class="btn btn-primary btn-large pull-right">
+                 </form>
+                 <br>
+                </div>
+              </div><!--id -->
+              {% endfor %}
+             </tbody>
+            </table>
+          </div><!--/span-->
+
+        {% else %}
+
+        <div class="span6 ">
+          <div class="hero-unit well">
+              <h3>No Whiteboards Found:</h3>
+              <hr/>
+              <p>Click here to <a href="/walls/create/" span="btn btn-primary">Create a New Whiteboard</a></p>
+            </div>
+        {% endif %}
+        </div><!--span -->
+      </div><!--/row-->
+{% endblock content %}

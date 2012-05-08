@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Kolabria WikiWall - Create a new Whiteboard
+{% endblock %}
+
+{% block content %}
+ 
+  <div class="container-fluid">
+    <div class="row-fluid">
+      {% include "includes/focus-sidebar.html" %}
+
+      {% if messages %}
+        <div class="span6 offset3">
+          <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+          {% for message in messages %}
+           <p>{{ message }}</p>
+          {% endfor %}
+          </div><!-- alert-block -->
+        </div><!--/span6 -->
+      {% endif %}
+ 
+      <div class="span8 ">
+        <div class="hero-unit well">
+          <h3>Enter Whiteboard Details:</h3>
+          <hr />
+          <form action="." method="post" class="form-horizontal">
+              {{ form.as_p }}{% csrf_token %} 
+            <button a href="/walls/" class="btn btn-large">Cancel</button>
+            <input type="submit" value="create" class="btn btn-primary btn-large">
+          </form>
+          <hr/> 
+        </div>
+      </div><!--span -->
+    </div><!--row -->
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block title %} Giriş {% endblock %}
+
+{% block content %}
+	
+	<div class="page-header">
+		<h1>Login</h1>
+	</div>
+	
+	<div class="div8">
+		
+		{% if form.errors %}
+		    <div class="alert alert-error">
+				<a class="close" data-dismiss="alert">&times;</a>
+		    	Invalid credentials. Please try again.
+			</div>
+		{% endif %}
+		
+		{% include '_form.html' %}
+		
+	</div>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "baseregister.html" %}
+
+{% block title %}
+    Kolabria - Create New Account</title>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+   <div class="row-fluid"><!-- start header -->
+    <div class="span4 logo">
+      <a href="index.html"><h1>Kolabria - Create an Account</h1></a>
+      <br/>
+    </div>
+  <div class="span8">
+    <div class="row">
+      <div class="span1">&nbsp;</div>
+      <div class="span2">
+        <h4>Currency: <a href="#"><strong>USD</strong></a></h4>
+        
+      </div>
+      <div class="span2">
+        <a href="cart.html"><h4>Beta Account with</h4></a>
+        <a href="cart.html">1 WikiWall Appliance</a>
+      </div>          
+      <div class="span3 customer_service">
+        <h4>We LOVE feedback!</h4>
+        <h4><a href="#">feedback@kolabria.com</a></h4>
+        <h4><small>Customer Support: 514 272 5886</small></h4>
+        <br/>
+      </div>
+    </div>
+  </div>
+</div><!-- end header -->
+
+<div class="row-fluid"><!-- start nav -->
+  <div class="span10">
+    <ul class="breadcrumb">
+      <li><a href="#">Home</a> <span class="divider">/</span></li>
+      <li><a href="#">Account</a> <span class="divider">/</span></li>
+      <li class="active"><a href="#">Create</a></li>
+    </ul>
+  </div>
+</div><!-- end nav -->
+
+    <div class="row-fluid"><!-- messages -->
+      {% if messages %}
+        <div class="span10 ">
+          <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+          {% for message in messages %}
+           <p>{{ message }}</p>
+          {% endfor %}
+          </div><!-- alert-block -->
+        </div><!--/span6 -->
+      {% endif %}
+  </div><!-- messages -->
+
+  <div class="span10">
+    <br />
+    <form action="/create/" method="post" class="form-horizontal">{% csrf_token %}
+      <fieldset>
+        <div class="span5 ">
+          <legend class="span4 offset1">Account Details</legend>
+          <div class="control-group">
+            <label class="control-label">First Name</label>
+            <div class="controls docs-input-sizes">
+              {{ form.first_name.errors }}
+              {{ form.first_name }}
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">Last Name</label>
+            <div class="controls docs-input-sizes">
+              {{ form.last_name.errors }}
+              {{ form.last_name }}
+            </div>
+          </div>            
+          <div class="control-group">
+            <label class="control-label">Email Address</label>
+            <div class="controls docs-input-sizes">
+              {{ form.email.errors }}
+              {{ form.email }}
+            </div>
+          </div> 
+          <div class="control-group">
+            <label class="control-label">Company Name</label> 
+            <div class="controls docs-input-sizes">
+              {{ form.company.errors }}
+              {{ form.company }}
+            </div>
+          </div>            
+ 
+          <div class="control-group">
+            <label class="control-label">Username</label>
+            <div class="controls docs-input-sizes">
+              {{ form.username }}
+              {{ form.username.errors }}
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">Password</label>
+            <div class="controls docs-input-sizes">
+              {{ form.password1}}
+              {{ form.password1.errors }}
+            </div>
+          </div>            
+          <div class="control-group">
+            <label class="control-label">Confirm password</label>
+            <div class="controls docs-input-sizes">
+              {{ form.password2}}
+              {{ form.password2.errors }}
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div class=" span12 no_margin_left">
+    <hr>
+    <div class="span10 ">
+         {{ form.agree_terms.errors }}
+      <p>{{ form.agree_terms }} I have read and agree to the <a href="#">Privacy Policy</a></p> 
+         {{ form.newsletter.errors }}
+      <p>{{ form.newsletter }} Subscribe to our newsletter </p> 
+      <button class="btn btn-primary btn-large pull-right" type="submit">Register</button></div>
+    </div>
+
+    </fieldset>
+  </form>
+</div>
+
+</div>
+{% endblock %}
+

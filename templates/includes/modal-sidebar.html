@@ -1,0 +1,33 @@
+{% block sidebar %}
+  
+    <div class="span2">
+      <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+          <li class="nav-header">Account</li>
+          <li><a href="/walls/"><i class="icon-home"></i> Home</a></li>
+          <li class="active"><a href="/walls/"><i class="icon-comment"></i> Whiteboards</a></li>
+          <!-- <li><a href="#"><i class="icon-inbox"></i> Messages</a></li> -->
+          <li><a href="/appliances/"><i class="icon-th" ></i> Appliances</a></li>
+          <li><a href="/accounts/settings/"><i class="icon-cog"></i> Settings</a></li>
+          <li><a href="/accounts/profile/{{ user.username }}/"><i class="icon-user"></i> Profile</a></li>
+        </ul>
+      </div><!--/.well sidebar-nav -->
+
+      <a class="btn btn-primary btn-large"  data-toggle="modal" href="#create">Create a new WikiWall</a>
+    </div><!--/span2 -->
+    <div id="create" class="modal hide fade ">
+      <div class="modal-header">
+        <a class="close" data-dismiss="modal" >&times;</a>
+          <h3>Enter WikiWall Details:</h3>
+      </div>
+      <div class="modal-body">
+           <form action="/walls/create/" method="post" class="form-horizontal">
+             {{ new_form.as_p }}{% csrf_token %}
+           {% comment %}<button a href="/walls/" class="btn btn-large offset2">Cancel</button>{% endcomment %}
+           <input type="submit" value="Create WikiWall" class="btn btn-primary btn-large pull-right" data-content="Click here to create your WikiWall">
+         </form>
+         <br>
+       </div>
+     </div><!--span -->
+
+    {% endblock sidebar %}

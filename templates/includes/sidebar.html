@@ -1,0 +1,18 @@
+{% block sidebar %}
+
+        <div class="span2">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Account</li>
+                <li><a href="/walls/"><i class="icon-home"></i> Home</a></li>
+                <li class="active"><a href="/walls/"><i class="icon-th" ></i> Whiteboards</a></li>
+                <!-- <li><a href="#"><i class="icon-inbox"></i> Messages</a></li> -->
+                <li><a href="/appliances/"><i class="icon-cog"></i> Appliances</a></li>
+                <li><a href="/account/profile"><i class="icon-user"></i> Profile</a></li>
+            </ul>
+          </div><!--/.well sidebar-nav -->
+
+          <a class="btn btn-primary btn-large" href="{% url walls.views.create_wall %}">Create a New Whiteboard</a>
+        </div><!--/span2 -->
+
+{% endblock sidebar %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}
+   Kolabria  |  Delete WikiWall
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row-fluid">
+        {% include "includes/focus-sidebar.html" %}
+        <div class="span6 ">
+            <form class="well">  
+              <h3>Please confirm you wish to delete the WikiWall named: {{ del_wall.name }}</h3>
+              <hr/> 
+              <label class='alert alert-warning'>Warning: This action cannot be reversed.
+                <a class="close" data-dismiss="alert">×</a>
+              </label>  
+              {{ del_form.as_p }} 
+              <button type="submit" method="post" action="/walls/delete/{{ del_wall.id }}/" class="btn btn-primary ">Submit</button>  
+            </form>  
+      </div>
+        </div><!--span -->
+      </div><!--row -->
+
+{% endblock %}

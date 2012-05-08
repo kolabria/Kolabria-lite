@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load markup %}
+
+{% block title %} {{ tuser.username }} {% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+      <div class="row-fluid">
+        {% include "includes/modal-sidebar.html" %}
+        {% if messages %}
+        <div class="span6 offset3">
+          <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+          {% for message in messages %}
+           <p>{{ message }}</p>
+          {% endfor %}
+          </div><!-- alert-block -->
+        </div><!--/span6 -->
+        {% endif %}
+
+  <div class="span8">
+    <h1>Hello user: {{ user.username }}.  Welcome to Kolabria!</h1>
+    <br/>
+  </div>	
+
+  <div class="span8">
+   	<table class="table table-bordered">
+      <a href="/accounts/settings/update_profile/" class="pull-right">Update User Profile</a>
+      <br />
+      <a href="/accounts/settings/update_user/" class="pull-right">Update User Details</a>
+      <tr>
+				<th>Username</th>
+				<td>{{ tuser.username }}</td>
+			</tr>
+			<tr>
+				<th>First Name</th>
+				<td>{{ tuser.first_name }}</td>
+			</tr>
+			<tr>
+				<th>Last Name</th>
+				<td>{{ tuser.last_name }}</td>
+			</tr>
+			<tr>
+				<th>Email</th>
+				<td><a href="mailto:{{ tuser.email }}">{{ tuser.email }}</a></td>
+			</tr>
+			<tr>
+				<th>Joined</th>
+				<td>{{ tuser.date_joined.date }}</td>
+			</tr>
+			<tr>
+				<th>Website</th>
+				<td>
+					<a href="{{ profile.web_site }}" target="_blank">
+						{{ profile.web_site }}
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					About Me:
+				</th>
+				<td>
+					{{ profile.about}}
+				</td>
+			</tr>
+			<tr>
+				<th>City:</th>
+				<td>
+					{{ profile.get_city_display }}
+				</td>
+			</tr>
+   </table>	
+	
+	</div>
+	
+{% endblock %}

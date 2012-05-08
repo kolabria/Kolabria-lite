@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}
+   Kolabria Appliance  |  Unsubscribe WikiWall
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid ">
+  <div class="row-fluid span8 ">
+    <label class='alert alert-info span6'>
+      <a class="close" data-dismiss="alert">×</a>
+      <p>
+       <strong>Unsubscribe</strong> removes a WikiWall from the
+       list of available walls for this appliance. The WikiWall is
+       still accessible to the wall owner and any users who are
+       sharing the WikiWall as well as any other appliances to which
+       the WikiWall has been published.
+      </p>
+    </label>  
+  </div><!-- row -->
+ 
+  <div class="row-fluid span8 ">
+    <div class="span8 ">
+    <hr />
+    {% if walls %}
+    <h1>WikiWall Appliance: {{ box.name }}</h1>
+    <h3>Location: {{ box.location }}</h3>
+    <br />
+    <h3>Currently Subscribing to the following WikiWalls:</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>owner</th>
+          <th>Published to Appliances</th>
+          <th>Deactivate from Appliance</th>
+          <th>Unpublish All Appliances</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for wall in walls %}
+        <tr>
+          <td>{{ wall.name }}</td>
+          <td>{{ wall.owner.email }}</td>
+          <td>{{ wall.published }}</td>
+          <td>
+            <form action="/box/{{ box.id }}" method="post" class="form-horizontal">
+              <input type="hidden" name="wid" value="{{ wall.id }}" />
+              <span class="hidden"{{ unsub_form.as_p }}</span>
+              <button input type="submit" value="unsub" class="btn
+                  btn-primary"/>Deactivate from this Appliance</button>
+            </form>
+          </td>
+          <td>
+            <form action="/box/unsuball/{{ box.id }}" method="post" class="form-horizontal">
+              <span class="hidden"{{ unsub_form.as_p }}</span>
+              <input type="hidden" name="wid" value="{{ wall.id }}" />
+              <button input type="submit" value="unsub" class="btn
+                  btn-primary"/>Unpublish from All Appliances</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+      </tbody>
+    </table>
+  </div><!-- span -->
+</div><!-- row -->
+{% endblock %}

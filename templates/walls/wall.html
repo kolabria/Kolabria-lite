@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Kolabria WikiWall - Real-time Collaborative Whiteboard</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+      <div class="row-fluid">
+       <div class="span8">
+          <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+            <h3>Welcome! This is your New Whiteboard.</h3>
+            <p>Wall Owner email: {{ wall.owner.email }}</p>
+            <p>Wall link id: {{ wall.link }}</p>
+            <p>Wall url: <a href="/walls/{{ wall.link }}">link</a></p>
+          </div><!-- alert-block -->
+          <hr/> 
+       </div><!--/span-->
+      </div><!--/row-->
+      {% endblock %}

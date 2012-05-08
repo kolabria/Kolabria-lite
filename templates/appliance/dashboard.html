@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}
+   Kolabria WWA - {{ box_id}}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+      {% if messages %}
+      <div class="span8 ">
+        <div class="alert alert-block">
+        <a class="close" data-dismiss="alert">×</a>
+        {% for message in messages %}
+           <p>{{ message }}</p>
+        {% endfor %}
+          </div><!-- alert-block -->
+      </div><!--/span6 -->
+      {% endif %}
+ 
+     <div class="row-fluid span8 offset1">
+       <div class="span8 ">
+          <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+            <h3>Welcome! This is your New Appliance.</h3>
+            <p>Appliance name: <a href="/box/{{ box_id}}">{{ box_id }}</a></p>
+         </div><!-- alert-block -->
+          <hr/> 
+       </div><!--/span-->
+     </div><!--/row-->
+   
+    <div class="row-fluid span8 offset1">
+      <div class="hero-unit span7">
+
+
+    {% if box %}
+
+    <div class="span9 ">
+      <h3>Available WikiWalls:</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>WikiWall Name</th>
+            <th>Status</th>
+            <th>Permissions</th>
+            <th>Last Modified</th>
+            <th>Action</th>
+            <th>Published to:</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for wall in box.walls %}
+          <tr id="{{ wall.id }}">
+            <td><a href="/walls/{{ wall.id }}">{{ wall.name }}</a></td> {% comment %} {% url kolabria.walls.views.view_wall wall.id %} {% endcomment %}
+            <td>{{ wall.status }}</td>
+            <td>owner</td>
+            <td>{{ wall.modified }}</td>
+            <td>
+              <div class="btn-group">
+                <a class="btn" href="/walls/{{ wall.id }}">open</a><a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/walls/update/{{ wall.id }}">edit details</a></li>
+                  <li><a href="#delete-{{ wall.id }}" data-toggle="modal">delete</a></li>
+                </ul>
+              </div>
+            </td>
+            <td>{{ wall.published }}</td>
+        </tr>
+          {% endfor %}
+
+          {% for wall in walls.own %}
+          <div id="delete-{{ wall.id }}" class="modal hide fade ">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal" >&times;</a>
+              <h3>Delete WikiWall: <strong>{{ wall.name }}</strong></h3>
+            </div>
+            <div class="modal-body">
+                <form action="/walls/delete/{{ wall.id }}/" method="post" class="form-horizontal">
+                  <h3><strong> Deleting WikiWall ID:</strong> {{ wall.id }}</h3>
+                  <br />
+                  <span class="hide">{{ del_form.as_p }}</span>
+               {% comment %}<button a href="/walls/" class="btn btn-large offset2">Cancel</button>{% endcomment %}
+               <button a class="btn btn-large pull-left" data-dismiss="modal">Cancel</button>
+               <input type="submit" value="Delete WikiWall" class="btn btn-primary btn-large pull-right">
+             </form>
+             <br>
+            </div>
+          </div><!--id -->
+          {% endfor %}
+
+        {% for swall in walls.shared %} 
+          <tr id="{{ swall.id }}">
+            <td><a href="/walls/{{ swall.id }}">{{ swall.name }}</a></td>
+            <td>{{ swall.status }}</td>
+            <td>sharing</td>
+            <td>{{ swall.modified }}</td>
+            <td>
+              <div class="btn-group">
+                <a class="btn" href="/walls/{{ swall.id }}">open</a><a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/walls/update/{{ swall.id }}">edit details</a></li>
+                </ul>
+              </div>
+            <td>{{ swall.published }}</td>
+            </td>
+          </tr>
+          {% endfor %}
+         </tbody>
+        </table>
+      </div><!--/span-->
+
+    {% else %}
+
+    <div class="span8 ">
+      <div class="hero-unit ">
+          <h3>No WikiWalls Found:</h3>
+          <hr/>
+          <p>Click here to <a href="/walls/create" span="btn
+              btn-primary">Create a New WikiWall</a></p>
+        </div>
+    {% endif %}
+    </div><!--span -->
+  </div><!--/row-->
+
+
+{% endblock %}
+
+      {% comment %}
+            <p>Appliance location: <a href="/appliance/{{ appliance.location }}">{{ appliance.location }}</a></p>
+            <p>Appliance Owner email: {{ appliance.owner.email }}</p>
+            <p>Appliance id: {{ appliance.id }}</p>
+      {% endcomment %} 

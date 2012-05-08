@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Kolabria - New Account Welcome Page</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+      <div class="row-fluid ">
+
+      {% include "includes/admin-sidebar.html" %}
+
+
+      {% if messages %}
+        <div class="span6 offset3">
+          <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+          {% for message in messages %}
+           <p>{{ message }}</p>
+          {% endfor %}
+          </div><!-- alert-block -->
+        </div><!--/span6 -->
+      {% endif %}
+
+        <div class="span9 well">
+          <h1>Welcome!</h1>
+          <br>
+          <h3>Company: {{ company }}</h3>
+          <h3>Account Admin: {{ user.username }} 
+          <h3>Admin email: {{ user.email }}</h3>
+
+          <br /> 
+          <ul id="tab" class="nav nav-tabs">
+            <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+            <li><a href="#appliance" data-toggle="tab">Appliances</a></li>
+            <li><a href="#users" data-toggle="tab">Users</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#profile" data-toggle="tab">My Profile</a></li>
+                <li><a href="#dropdown2" data-toggle="tab">Billing History</a></li>
+                <li><a href="#dropdown2" data-toggle="tab">Support & Contact</a></li>
+                <li><a href="#dropdown2" data-toggle="tab">Online Help Docs</a></li>
+              </ul>
+            </li>
+          </ul>
+            <div id="myTabContent" class="tab-content">
+              <div class="tab-pane fade in active" id="home">
+                <h3>Admin Overview</h3>
+                <p>Welcome to the admin interface for your account. From here you can manage your appliances, WikiWalls, and authorized users. Your billing and payment information can be managed here as well. For more details read the <a href="#">Administrator Manual</a></p>
+              </div>
+              <div class="tab-pane fade" id="appliance">
+                <h3>Appliance Menu<h3> 
+                <form action="/welcome/" method="post" class="form-horizontal">
+                  {{ form.as_p }}
+                <input type="submit" value="create" class="btn btn-primary btn-large">
+              </div>
+              <div class="tab-pane fade" id="users">
+                <h3>User Management<h3> 
+                <p><a href="/appliance/add/">Add new users</a><p> 
+              </div>
+              <div class="tab-pane fade" id="profile">
+                <h3>Update Profile<h3> 
+                    <p><a href="/users/{{ user.email }}/update/">Update Profile</a><p> 
+               </div>
+              <div class="tab-pane fade" id="dropdown2">
+                <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
+              </div>
+            </div>
+           </div><!-- /row -->
+{% endblock content %}
