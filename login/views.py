@@ -4,14 +4,17 @@ from django.template.context import RequestContext
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, logout, login
+from django.contrib import messages
 
 from mongoengine.django.auth import User
 
 from login.forms import UserCreationForm
 from walls.models import Wall
 
+import ipdb
 
 def register(request):
+    ipdb.set_trace()
     form = UserCreationForm(request.POST or None)
     data = {'title': 'Kolabria - Registration Page',
             'form': form,}
@@ -24,7 +27,7 @@ def register(request):
         new_user.save()
         auth_user = authenticate(username=username, password=password)
         login(request=request, user=auth_user)
-        return render_to_response('login/register-success.html',
-                          context_instance=RequestContext(request))
+        messages.success(request, new_user)
+        return HttpResponseRedirect('/devices/')
     return render_to_response('login/register.html', data,
                               context_instance=RequestContext(request))

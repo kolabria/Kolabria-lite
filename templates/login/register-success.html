@@ -2,14 +2,26 @@
 
 {% block content %}
 <div class="container-fluid">
+  <div class="row-fluid">
+    {% if messages %}
+    <div class="span6 offset3">
+      <div class="alert alert-block">
+        <a class="close" data-dismiss="alert">×</a>
+          {% for message in messages %}
+           <p>{{ message }}</p>
+          {% endfor %}
+      </div><!-- alert-block -->
+    </div><!--/span6 -->
+  </div><!--/row -->
+    {% endif %}
+  
   <div class="row-fluid offset2">
     <div class="span7">
       <div class="hero-unit well">
         <h1>Welcome!</h2>
         <h2>Your account has been created</h2>
         <hr />
-        <p>You may now update your <a href="/profile/">profile</a></p>
-        <p>Or continue to your dashboard to get started<a href="/walls/">Dashboard</a></p>
+        <p>Continue to your devices page to get started<a href="/walls/">Devices</a></p>
       </div><!--hero-->
     </div><!--span -->
   </div><!--row -->

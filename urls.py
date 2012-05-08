@@ -6,14 +6,22 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
+# Site Map - Web and mobile devices (urls to views)
+# /             public.views.home
+# /create       public.views.create
+# /devices      appliance.views.devices
+# /login        django.contrib.auth.views.login
+# /logout       django.contrib.auth.views.logout
+# /walls/       walls.views.walls
+# /walls/<wid>  walls.views.view
+# TODO: appliance views & walls CRUD
 
 urlpatterns = patterns('',
-    (r'', include('public.urls')),
-    (r'', include('appliance.urls')),
-    (r'', include('login.urls')),
-    (r'', include('walls.urls')),
-    (r'^blog', include('apps.blog.urls')),
-    (r'', include('appliance.urls')),
+    (r'', include('public.urls')), # / /create/
+    (r'', include('appliance.urls')), # /devices/ 
+    (r'', include('login.urls')), # /login/ /logout/ /register/
+    (r'', include('walls.urls')), # /wall/
+    (r'^blog', include('apps.blog.urls')), # mongoforms example
 )
 
 if settings.DEBUG:
