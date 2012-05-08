@@ -19,6 +19,7 @@ def create(request):
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
+        company = request.POST['company']
         password = request.POST['password2']
         new_user = User.create_user(username=username, email=email,
                                     password=password)
@@ -28,7 +29,7 @@ def create(request):
 
         # create the account instance
         new_account = Account()
-        new_account.name = request.POST['company_name']
+        new_account.name = request.POST['company']
 
         # set new user as admin for account instance; save account
         new_account.admin = new_user
@@ -40,8 +41,8 @@ def create(request):
         login(request=request, user=auth_user)
         messages.success(request, 'Successfully logged in as %s' % \
                                                            auth_user.username)
-        slug = slugify(new_account.name)
-        return HttpResponseRedirect('/%s/welcome/' % slug)
+#        slug = slugify(new_account.name)
+        return HttpResponseRedirect('/devices/')
 
     data = {'title': 'Kolabria - Create a new Account ', 'form': form, }
     return render_to_response('account/create.html', data,

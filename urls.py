@@ -9,6 +9,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
     (r'', include('public.urls')),
+    (r'', include('appliance.urls')),
+    (r'', include('login.urls')),
     (r'', include('walls.urls')),
     (r'^blog', include('apps.blog.urls')),
     (r'', include('appliance.urls')),

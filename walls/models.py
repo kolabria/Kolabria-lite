@@ -5,8 +5,8 @@ from mongoengine import ReferenceField, StringField, DateTimeField
 from mongoengine import EmailField, ListField, ObjectIdField
 
 from mongoengine.django.auth import User
-from kolabria.account.models import Account
-from kolabria.appliance.models import Box
+from account.models import Account
+from appliance.models import Box
 from datetime import datetime
 from django import forms
 

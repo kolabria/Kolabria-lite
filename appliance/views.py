@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from mongoengine.django.auth import User
-from kolabria.walls.models import Wall
-from kolabria.appliance.models import Box
-from kolabria.appliance.forms import PubWallForm, UnsubWallForm
+from walls.models import Wall
+from appliance.models import Box
+from appliance.forms import PubWallForm, UnsubWallForm
 from datetime import datetime
 
 import ipdb

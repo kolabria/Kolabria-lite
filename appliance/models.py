@@ -2,6 +2,8 @@ from mongoengine import connect, Document
 from mongoengine import ReferenceField, StringField, DateTimeField, ListField
 from mongoengine import ObjectIdField
 from mongoengine.django.auth import User
+
+from account.models import Account
 from datetime import datetime
 
 class Box(Document):

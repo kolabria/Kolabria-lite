@@ -23,8 +23,10 @@ class NewAccountForm(forms.Form):
                            max_length=30,
                            required=True)
     company = forms.CharField(widget=forms.TextInput(
-                           attrs={'placeholder': 'Company Name',
-                                  'class': 'span4'})),
+                           attrs={'placeholder': 'Company',
+                                  'class': 'span4'}),
+                           max_length=30, 
+                           required=True)
     password1 = forms.CharField(widget=forms.PasswordInput(
                            attrs={'placeholder': '**********',
                                   'class': 'span4'}),

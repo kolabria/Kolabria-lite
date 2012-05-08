@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate, logout, login
 
 from mongoengine.django.auth import User
 
-from kolabria.login.forms import UserCreationForm
-from kolabria.walls.models import Wall
+from login.forms import UserCreationForm
+from walls.models import Wall
 
 
 def register(request):

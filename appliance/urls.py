@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from appliance import views
 
 urlpatterns = patterns('',
+    url(r'^devices/$', views.appliances),
     url(r'^box/$', views.auth_box),
     url(r'^box/(?P<bid>\w+)/$', views.the_box),
     url(r'^box/active/(?P<wid>\w+)/$', views.active_wall),
