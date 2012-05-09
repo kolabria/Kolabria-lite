@@ -15,7 +15,7 @@ from walls.forms import PubWallForm, UnpubWallForm
 from walls.models import Wall
 from appliance.models import Box
 
-import ipdb
+#import ipdb
 
 # Legend of urls and views
 #walls             url(r'^walls/$', views.walls), 
@@ -42,7 +42,7 @@ def create(request):
         name = wall.name
      
         invited_emails = request.POST.get('invited', '')
-        ipdb.set_trace() 
+#        ipdb.set_trace() 
         if invited_emails:
             invited_list = invited_emails.split(',')
             clean_emails = [ email.strip() for email in invited_list ]

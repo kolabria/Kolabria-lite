@@ -11,7 +11,7 @@ from appliance.models import Box
 from appliance.forms import PubWallForm, UnsubWallForm
 from datetime import datetime
 
-import ipdb
+#import ipdb
 
 @login_required
 def appliances(request):
