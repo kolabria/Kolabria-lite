@@ -13,7 +13,7 @@
         <div class="span6 offset3">
           <div class="alert alert-block">
             <a class="close" data-dismiss="alert">×</a>
-            <p>This is your Appliances Page. You can manage your WikiWall Appliances here.</p>
+            <p>This is your device list. You can manage your WikiWall devices here.</p>
           </div><!-- alert-block -->
         </div><!--/span6 -->
 
@@ -22,7 +22,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Appliance Name</th>
+                <th>Device Name</th>
                 <th>Location</th>
                 <th>Action</th>
               </tr>
@@ -38,7 +38,6 @@
                   <div class="btn-group">
                     <a class="btn" href="/appliance/detail/{{ box.id }}">view</a><a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                      <li><a href="#">share</a></li>
                       <li><a href="/appliance/edit/{{ box.id }}">edit</a></li>
                       <li><a href="/appliance/remove/{{ box.id }}">remove</a></li>
                     </ul>
