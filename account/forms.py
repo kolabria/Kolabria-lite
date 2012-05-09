@@ -37,5 +37,5 @@ class NewAccountForm(forms.Form):
                                   'class': 'span4'}),
                            max_length=30, 
                            required=True)
-    agree_terms = forms.BooleanField(widget=forms.CheckboxInput)
+#    agree_terms = forms.BooleanField(widget=forms.CheckboxInput)
 

@@ -18,8 +18,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
     (r'', include('public.urls')), # / /create/
-    (r'', include('appliance.urls')), # /devices/ 
     (r'', include('login.urls')), # /login/ /logout/ /register/
+    (r'', include('appliance.urls')), # /devices/ 
     (r'', include('walls.urls')), # /wall/
     (r'^blog', include('apps.blog.urls')), # mongoforms example
 )

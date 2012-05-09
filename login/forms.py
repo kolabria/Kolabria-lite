@@ -1,21 +1,36 @@
-#from django import forms
+# -*- coding: utf-8 -*-
 from django import forms
 from mongoengine.django.auth import User
+
 
 class UserCreationForm(forms.Form):
     """
     A form that creates a user, with no privileges, from the given username and password.
     """
-    email = forms.EmailField(label="email", help_text = "Enter your email address",
+    first_name = forms.CharField(label="First Name", max_length=30, required=False,
+                       help_text="Enter your first name",
+                       widget=forms.TextInput)
+    last_name  = forms.CharField(label="Last Name", max_length=30, required=False,
+                       help_text="Enter your last name",
+                       widget=forms.TextInput)
+    email = forms.EmailField(label="email", help_text = "Enter your email address. Email must be unique.",
                        error_messages = {'invalid': "This is not a valid email address"})
-    #TODO EMAIL FIELD validation - does user exist in system? 
-    #is email from prohibited domain?
+    company = forms.CharField(label="Company", max_length=30, widget=forms.TextInput)
     username = forms.RegexField(label="Username", max_length=30, regex=r'^[\w.@+-]+$',
         help_text = "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.",
         error_messages = {'invalid': "This value may contain only letters, numbers and @/./+/-/_ characters."})
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Password confirmation", widget=forms.PasswordInput,
         help_text = "Enter the same password as above, for verification.")
+    agree_terms = forms.BooleanField(widget=forms.CheckboxInput)
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        try:
+            User.objects.get(email=email)
+        except User.DoesNotExist:
+            return email
+        raise forms.ValidationError("A user with that email address already exists.")
 
     def clean_username(self):
         username = self.cleaned_data["username"]
