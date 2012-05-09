@@ -11,6 +11,19 @@ from account.forms import NewAccountForm
 import ipdb
 
 
+def public(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/devices/')
+    else:
+        return HttpResponseRedirect('/')
+
+
+def public(request):
+    data = {'title': 'Kolabria - Homepage', }
+    return render_to_response('public/home.html', data,
+                              context_instance=RequestContext(request))
+
+"""
 def create(request):
     form = NewAccountForm(request.POST or None)
     if form.is_valid():
@@ -48,12 +61,4 @@ def create(request):
     data = {'title': 'Kolabria - Create a new Account ', 'form': form, }
     return render_to_response('account/create.html', data,
                               context_instance=RequestContext(request))
-
-
-
-def public(request):
-    data = {'title': 'Kolabria - Homepage', }
-    return render_to_response('public/home.html', data,
-                              context_instance=RequestContext(request))
-
-
+"""
