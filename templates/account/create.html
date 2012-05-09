@@ -60,7 +60,7 @@
     <form action="/register/" method="post" class="form-horizontal">{% csrf_token %}
       <fieldset>
         <div class="span5 ">
-          <legend class="span4 offset1">Account Details</legend>
+          <legend class="span4 ">Account Details</legend>
           <div class="control-group">
             <label class="control-label">First Name</label>
             <div class="controls docs-input-sizes">
@@ -110,11 +110,16 @@
               {{ form.password2.errors }}
             </div>
           </div>
-      </div>
-    </div>
+       </div>
 
-    <div class=" span12 no_margin_left">
-    <hr>
+    <div class="span10 no_margin_left">
+          <div class="span4">
+          <legend class="span4 ">Terms of Service</legend>
+            <textarea class="span4">This is the terms of service text. To learn more about our terms of service read this text. This is the terms of service text. To learn more about our terms of service read this text.
+ This is the terms of service text. To learn more about our terms of service read this text. This is the terms of service text. To learn more about our terms of service read this text. This is the terms of service text. To learn more about our terms of service read this text.
+            </textarea>
+          </div>
+ 
     <div class="span10 ">
          {{ form.agree_terms.errors }}
       <p>{{ form.agree_terms }} I have read and agree to the <a href="#">Privacy Policy</a></p> 
