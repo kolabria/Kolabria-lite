@@ -51,6 +51,9 @@ EMAIL_PORT = 587
 INTERNAL_IPS = ('127.0.0.1',)
 FROM_EMAIL = EMAIL_HOST_USER
 
+LOGIN_REDIRECT_URL = '/devices/'
+LOGIN_URL = '/login/'
+
 MEDIA_ROOT = PATH + '/media/'
 MEDIA_URL = '/media/' 
 
