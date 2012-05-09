@@ -18,7 +18,7 @@ def appliances(request):
     boxes = Box.objects.all()
     data = {'title': 'Kolabria - My Appliances',
             'boxes': boxes, }
-    return render_to_response('appliance/myappliances.html', data,
+    return render_to_response('appliance/devices.html', data,
                        context_instance=RequestContext(request))
 
 
@@ -49,7 +49,6 @@ def auth_box(request):
 def the_box(request, bid):
 #    ipdb.set_trace()
     unsub_form = UnsubWallForm()
-    
     pub_form = PubWallForm()
     box = Box.objects.get(id=bid)
     box_name = box.name
