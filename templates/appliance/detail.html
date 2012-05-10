@@ -35,63 +35,36 @@
   
      <div class="row-fluid ">
        <div class="span6 well">
-         <h1 align="center">Details of Active WikiWall</h1>
+         <h1 align="center">WikiWall - Details</h1>
          <br />
-         <h1>WikiWall: {{ active.name }}  |  <a href="/walls/{{ active.id }}"> Click to Activate</a></h1>
-         <h3>Wall owner: {{ active.owner.email }}</h3>
-         <h3>Sharing with: {{ active.sharing }}</h3>
-         <h3>Published on: {{ active.published }}</h3>
-         <hr />
-         <br />
-         <h1 align="center">Details of Appliance</h1>
-         <h3>Box Name: {{ box.name }}</h3>
-         <h3>Box ID: {{ box.id }}</h3>
-         <h3>Box Location: {{ box.location }}</h3>
-         <h3>Box.walls: {{ box.walls }}</h3>
+         <h2 align="center">Device Info</h1>
+         <h3>Box ID: {{ box.name }}</h3>
+         <h3>Room Name: {{ box.location }}</h3>
        </div>
      </div> 
      <div class="row-fluid span8">
        <div class="span10">
-        <h2>Available WikiWalls on this Appliance</h2>
+        <h2>Devices on Quick Share List</h2>
           <table class="table">
             <thead>
               <tr>
-                <th>Board Name</th>
-                <th>Status</th>
-                <th>Permissions</th>
+                <th>Room Name</th>
+                <th>Box ID</th>
                 <th></th>
-                <th></th>
-                <th>wall.published</th>
               </tr>
             </thead>
             <tbody>
-              {% for wall in walls %}
-              <tr id="{{ wall.id }}">
-                <td><a href="/walls/{{ wall.id }}">{{ wall.name }}</a></td>
-                <td>{{ wall.status }}</td>
-                <td>owner</td>
-                <td>
-                  <form action="/box/unsubwall/{{ bid }}/" method="post" class="form-horizontal">
-                    {{ unsub_form.as_p }}  
-                    <input type="hidden" name="wid" value="{{ wall.id }}" />
-                    <input type="submit" value="deactivate" class="btn ">
-                  </form>
-               </td>
-               <td>
-                  <form action="/box/pubwall/{{ bid }}/" method="post" class="form-horizontal">
-                      {{ pub_form.as_p }} 
-                      <input type="hidden" name="wid" value="{{ wall.id }}" />
-                      <button input type="submit" value="activate" class="btn btn-primary"/>Activate</button>
-                  </form>
-                </td>
-                <td>{{ wall.published }}</td>
+              {% for box in boxes %}
+              <tr id="{{ box.id }}">
+                <td>Hello World</td>
+                <td>box.name</td>
+                <td>box.location</td>
+                <td><a class="btn" href="/devices/unshare/{{ box.id }}/" </a></td>
              </tr>
               {% endfor %}
             </tbody>
-            </table>
-            <button a class="btn btn-primary btn-large pull-right" data-dismiss="modal">Create New WikiWall</button>
+          </table>
           </div><!--/span-->
-
       </div>
     </div> 
 {% endblock %}

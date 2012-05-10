@@ -17,7 +17,8 @@ from datetime import datetime
 
 @login_required
 def appliances(request):
-    boxes = Box.objects.all()
+    profile = UserProfile.objects.get(user=request.user)
+    boxes = Box.objects.filter(company=profile.company)
     form = NewBoxForm(request.POST or None)
     if form.is_valid():
 #        ipdb.set_trace()
@@ -38,6 +39,22 @@ def appliances(request):
             'boxes': boxes, 
             'form': form, }
     return render_to_response('appliance/devices.html', data,
+                       context_instance=RequestContext(request))
+
+def edit_box(request, bid):
+    boxes = Box.objects.get(id=bid)
+    if request.method == 'POST':
+        form = BoxForm(request.POST, instance=box)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect('/devices/')
+    else:
+        form = BoxForm(instance=box)
+
+    data = {'title': 'Kolabria - My Appliances',
+            'box': box, 
+            'form': form, }
+    return render_to_response('appliance/detail.html', data,
                        context_instance=RequestContext(request))
 
 @login_required
