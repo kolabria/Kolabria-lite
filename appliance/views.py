@@ -13,14 +13,14 @@ from appliance.models import Box
 from appliance.forms import NewBoxForm, BoxForm, PubWallForm, UnsubWallForm
 from datetime import datetime
 
-import ipdb
+#import ipdb
 
 @login_required
 def appliances(request):
     boxes = Box.objects.all()
     form = NewBoxForm(request.POST or None)
     if form.is_valid():
-        ipdb.set_trace()
+#        ipdb.set_trace()
         box_name = request.POST['name']
         box_location = request.POST['location']
         profile = UserProfile.objects.filter(
