@@ -15,6 +15,7 @@ class Box(Document):
     name = StringField(default='New Appliance', max_length=32, required=True)
     location = StringField(max_length=100, required=False)
     active_wall = StringField(required=False)
+    walls = ListField(StringField())
 
     def __unicode__(self):
         return self.name
