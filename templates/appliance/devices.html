@@ -5,48 +5,61 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
-      <div class="row-fluid">
-
-      {% include "includes/appliance-sidebar.html" %}
-
-        <div class="span6 offset3">
-          <div class="alert alert-block">
-            <a class="close" data-dismiss="alert">×</a>
-            <p>This is your device list. You can manage your WikiWall devices here.</p>
-          </div><!-- alert-block -->
-        </div><!--/span6 -->
-
-        <div class="span6 ">
-          <h3>Appliances:</h3>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Device Name</th>
-                <th>Location</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
+  <div class="container-fluid">
+    <div class="row-fluid">
+    {% if messages %}
+      <div class="span6 offset3">
+        <div class="alert alert-block">
+          <a class="close" data-dismiss="alert">×</a>
+        {% for message in messages %}
+         <p>{{ message }}</p>
+        {% endfor %}
+        </div><!-- alert-block -->
+      </div><!--/span6 -->
+    {% endif %}
+  </div><!-- /row -->
+    <div class="row-fluid">
+      <div class="span6 ">
+        <h3>WikiWall Device List:</h3>
+        <table class="table">
+          <thead>
+            <tr class="offset1">
+              <th>Device Name</th>
+              <th>Location</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
               {% for box in boxes %}
-              <tr>
-                <td><a href="/box/{{ box.id }}">{{ box.name }}</a></td>
-                <td>{{ box.location }}</td>
-                <td>{{ box.status }}</td>
-                <td>{{ wall.modified }}</td>
-                <td>
-                  <div class="btn-group">
-                    <a class="btn" href="/appliance/detail/{{ box.id }}">view</a><a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="/appliance/edit/{{ box.id }}">edit</a></li>
-                      <li><a href="/appliance/remove/{{ box.id }}">remove</a></li>
-                    </ul>
-                  </div>
-                </td>
-                </tr>
-              {% endfor %}
-             </tbody>
-            </table>
-        </div><!--/span-->
-      </div><!--/row-->
+            <tr>
+              <td><a href="/box/{{ box.id }}">{{ box.name }}</a></td>
+              <td>{{ box.location }}</td>
+              <td>{{ box.status }}</td>
+              <td>{{ wall.modified }}</td>
+              <td>
+                <div class="btn-group">
+                  <a class="btn" href="/appliance/detail/{{ box.id }}">view</a><a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/appliance/edit/{{ box.id }}">edit</a></li>
+                    <li><a href="/appliance/remove/{{ box.id }}">remove</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+
+            <tr>
+              <form action="." method="post" class="form-horizontal">
+                  {% csrf_token %}
+                  {% for field in form %}
+                  <td>{{ field.label}}</td> 
+                  <td>{{ field }}</td>
+                  {% endfor %}
+                  <td><input type="submit" value="Add" class="btn btn-primary btn-small"></input></td>
+                </form>
+           </tbody>
+            </tr>
+          </table>
+      </div><!--/span-->
+    </div><!--/row-->
 {% endblock content %}
