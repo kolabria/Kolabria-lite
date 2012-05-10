@@ -24,7 +24,7 @@
         <table class="table">
           <thead>
             <tr class="offset1">
-              <th>Device Name</th>
+              <th>Device ID</th>
               <th>Location</th>
               <th>Action</th>
             </tr>
@@ -34,8 +34,6 @@
             <tr>
               <td>{{ box.name }}</td>
               <td>{{ box.location }}</td>
-              <td>{{ box.status }}</td>
-              <td>{{ wall.modified }}</td>
               <td><a href="/appliance/edit/{{ box.id }}">edit</a></td>
               <td><a href="/appliance/remove/{{ box.id }}">remove</a></td>
             </tr>
@@ -45,7 +43,6 @@
               <form action="." method="post" class="form-horizontal">
                   {% csrf_token %}
                   {% for field in form %}
-                  <td>{{ field.label}}</td> 
                   <td>{{ field }}</td>
                   {% endfor %}
                   <td><input type="submit" value="Add" class="btn btn-primary btn-small"></input></td>
