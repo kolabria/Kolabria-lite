@@ -8,6 +8,7 @@ from django.contrib import messages
 
 from mongoengine.django.auth import User
 from login.forms import UserCreationForm
+from login.models import UserProfile
 from account.models import Account
 from walls.models import Wall
 
@@ -30,8 +31,17 @@ def register(request):
         auth_user = authenticate(username=username, password=password)
         login(request=request, user=auth_user)
 
+        # Create a new account for this user
         new_account = Account(admin=new_user, company=request.POST['company'])
         new_account.save()
+
+
+        # Create a user profile to link this user to this account
+        new_profile = UserProfile(username=new_user.username,
+                                  user=new_user,
+                                  company=new_account)
+        new_profile.save()
+
         msg = 'Created username: %s and Company: %s' % (new_user.username,
                                                         new_account.company)
         messages.success(request, msg)

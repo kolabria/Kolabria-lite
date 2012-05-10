@@ -17,7 +17,7 @@ ADMINS = (
 AUTHENTICATION_BACKENDS = (
     'mongoengine.django.auth.MongoEngineBackend',
 )
-
+AUTH_PROFILE_MODULE = 'login.UserProfile'
 
 # Database settings
 connect('kolabria-new')
