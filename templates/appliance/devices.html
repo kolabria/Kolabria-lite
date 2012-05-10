@@ -34,22 +34,25 @@
             <tr>
               <td>{{ box.name }}</td>
               <td>{{ box.location }}</td>
-              <td><a href="/appliance/edit/{{ box.id }}">edit</a></td>
-              <td><a href="/appliance/remove/{{ box.id }}">remove</a></td>
+              <td><a href="/device/edit/{{ box.id }}">edit</a></td>
+              <td><a href="/devices/remove/{{ box.id }}">remove</a></td>
             </tr>
             {% endfor %}
 
             <tr>
               <form action="." method="post" class="form-horizontal">
-                  {% csrf_token %}
-                  {% for field in form %}
-                  <td>{{ field }}</td>
-                  {% endfor %}
-                  <td><input type="submit" value="Add" class="btn btn-primary btn-small"></input></td>
-                </form>
-           </tbody>
+                {% csrf_token %}
+                {% for field in form %}
+                <td>{{ field }}</td>
+                {% endfor %}
+              <td><input type="submit" value="Add" class="btn btn-primary btn-small"></input></td>
             </tr>
-          </table>
+              <tr>
+                <td>{{ field.errors }}</td>
+              </tr>
+              </form>
+           </tbody>
+         </table>
       </div><!--/span-->
     </div><!--/row-->
 {% endblock content %}

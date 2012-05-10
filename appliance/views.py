@@ -40,7 +40,27 @@ def appliances(request):
     return render_to_response('appliance/devices.html', data,
                        context_instance=RequestContext(request))
 
-
+@login_required
+def remove_box(request, bid):
+    info = """
+           Details:
+           user: %s\n
+           username: %s\n
+           company: %s\n
+           box: %s\n
+           box_name: %s\n
+           """
+    profile = UserProfile.objects.get(user=request.user)
+    box = Box.objects.get(id=bid)
+    msg0 = info % (request.user, request.user.username, 
+                   profile.company, box.id, box.name)
+    messages.info(request, msg0)
+    box.delete()
+    msg1 = 'Successfully removed appliance: %s %s %s' % (box.id,
+                                                        box.name,
+                                                        box.location)
+    messages.success(request, msg1)
+    return HttpResponseRedirect('/devices/')
 
 
 def auth_box(request):
