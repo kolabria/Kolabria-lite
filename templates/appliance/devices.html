@@ -34,8 +34,8 @@
             <tr>
               <td>{{ box.name }}</td>
               <td>{{ box.location }}</td>
-              <td><a href="/device/edit/{{ box.id }}">edit</a></td>
-              <td><a href="/devices/remove/{{ box.id }}">remove</a></td>
+              <td><a class="btn" href="/device/edit/{{ box.id }}">edit</button></td>
+              <td><a class="btn" href="/devices/remove/{{ box.id }}">remove</a></td>
             </tr>
             {% endfor %}
 

@@ -42,14 +42,7 @@ def appliances(request):
 
 @login_required
 def remove_box(request, bid):
-    info = """
-           Details:
-           user: %s\n
-           username: %s\n
-           company: %s\n
-           box: %s\n
-           box_name: %s\n
-           """
+    info = """user: %s | username: %s |  company: %s | box: %s | box_name: %s"""
     profile = UserProfile.objects.get(user=request.user)
     box = Box.objects.get(id=bid)
     msg0 = info % (request.user, request.user.username, 
