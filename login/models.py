@@ -18,15 +18,3 @@ class UserProfile(Document):
     username = StringField(max_length=32, required=True)
     user = ReferenceField(User)
     company = ReferenceField(Account)
-
-    def __unicode__(self):
-        if user.first_name:
-            return '%s %s' % (user.first_name, user.last_name)
-        else:
-            return user.username
-
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
-
-post_save.connect(create_user_profile, sender=User)

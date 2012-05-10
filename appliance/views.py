@@ -23,24 +23,24 @@ def appliances(request):
         ipdb.set_trace()
         box_name = request.POST['name']
         box_location = request.POST['location']
-        company_name = UserProfile.objects.filter(
-                                  username=request.user.username)[0]
-        company = Account.objects.filter(company=company_name)
-        msg = 'name: %s   |   company: %s' % (company_name, company)
+        profile = UserProfile.objects.filter(
+                                  user=request.user)[0]
+        new_box = Box.objects.create(company=profile.company, owner=request.user,
+                                     name=box_name, location=box_location)
+        new_box.save()
+        msg = '%s %s %s' % (new_box.name, new_box.location,
+                            profile.company.company) 
         messages.success(request, msg)
         return HttpResponseRedirect('/devices/')
-#        new_box = Box.objects.create(company=company, owner=request.user,
-#                                     name=box_name, location=box_location)
-#        new_box.save()
-#        msg = 'Company: %s\nDevice Name: %s\nLocation: %s' % (company.company,
-#                                                              box_name,
-#                                                              box_location)
+#        msg = 'name: %s   |   company: %s' % (company_name, company)
 #        messages.succes(request, msg)
     data = {'title': 'Kolabria - My Appliances',
             'boxes': boxes, 
             'form': form, }
     return render_to_response('appliance/devices.html', data,
                        context_instance=RequestContext(request))
+
+
 
 
 def auth_box(request):
