@@ -32,19 +32,12 @@
           <tbody>
               {% for box in boxes %}
             <tr>
-              <td><a href="/box/{{ box.id }}">{{ box.name }}</a></td>
+              <td>{{ box.name }}</td>
               <td>{{ box.location }}</td>
               <td>{{ box.status }}</td>
               <td>{{ wall.modified }}</td>
-              <td>
-                <div class="btn-group">
-                  <a class="btn" href="/appliance/detail/{{ box.id }}">view</a><a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="/appliance/edit/{{ box.id }}">edit</a></li>
-                    <li><a href="/appliance/remove/{{ box.id }}">remove</a></li>
-                  </ul>
-                </div>
-              </td>
+              <td><a href="/appliance/edit/{{ box.id }}">edit</a></td>
+              <td><a href="/appliance/remove/{{ box.id }}">remove</a></td>
             </tr>
             {% endfor %}
 
