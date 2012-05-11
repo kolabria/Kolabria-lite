@@ -43,6 +43,7 @@ def appliances(request):
 
 def edit_box(request, bid):
     boxes = Box.objects.get(id=bid)
+    """
     if request.method == 'POST':
         form = BoxForm(request.POST, instance=box)
         if form.is_valid():
@@ -50,10 +51,10 @@ def edit_box(request, bid):
         return HttpResponseRedirect('/devices/')
     else:
         form = BoxForm(instance=box)
-
-    data = {'title': 'Kolabria - My Appliances',
-            'box': box, 
-            'form': form, }
+    """
+    data = {'title': 'Kolabria - My Appliances',}
+#            'box': box, 
+#            'form': form, }
     return render_to_response('appliance/detail.html', data,
                        context_instance=RequestContext(request))
 

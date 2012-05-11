@@ -12,10 +12,8 @@ from login.models import UserProfile
 from account.models import Account
 from walls.models import Wall
 
-#import ipdb
 
 def register(request):
-#    ipdb.set_trace()
     form = UserCreationForm(request.POST or None)
     if form.is_valid():
         first_name = request.POST['first_name']
