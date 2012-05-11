@@ -32,8 +32,8 @@
           <tbody>
               {% for box in boxes %}
             <tr>
-              <td>{{ box.name }}</td>
-              <td>{{ box.location }}</td>
+              <td>{{ box.box_id }}</td>
+              <td>{{ box.box_name }}</td>
               <td><a class="btn" href="/devices/edit/{{ box.id }}">edit</button></td>
               <td><a class="btn" href="/devices/remove/{{ box.id }}">remove</a></td>
             </tr>

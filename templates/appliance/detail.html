@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container-fluid">
+    <div class="container-fluid well span8">
       <div class="row-fluid">
         {% if messages %}
         <div class="span6 ">
@@ -12,39 +12,41 @@
           {% endfor %}
           </div><!-- alert-block -->
         </div><!--/span6 -->
+       </div><!--/row -->
         {% endif %}
-        {% comment %}
-         <div class="span8">
-          <div class="alert alert-block">
-            <a class="close" data-dismiss="alert">×</a>
-            <h3>Welcome! This is your New Appliance.</h3>
-            <p>Appliance id: <a href="/box/{{ bid }}">{{ bid }}</a></p>
-            <p>Appliance name: {{ box_name }}</p>
-            <p>Location: {{ box.location }}</p>
-            <p>Owner Email: {{ box.owner.email }}</p>
-            <br/>
-            <h3>Available Walls | Wall Owner Email | Wall.id | Wall.published</h3> 
-            {% for wall in walls %}
-              <p>{{ wall.name }}  |  {{ wall.owner.email }}  |  {{ wall.id }}  |  {{ wall.published }} </p>
-            {% endfor %} 
-         </div><!-- alert-block -->
-          <hr/> 
-       </div><!--/span-->
-     </div><!--/row-->
-       {% endcomment %} 
-  
-     <div class="row-fluid ">
-       <div class="span6 well">
-         <h1 align="center">WikiWall - Details</h1>
-         <br />
-         <h2 align="center">Device Info</h1>
-         <h3>Box ID: {{ box.name }}</h3>
-         <h3>Room Name: {{ box.location }}</h3>
-       </div>
-     </div> 
-     <div class="row-fluid span8">
-       <div class="span10">
-        <h2>Devices on Quick Share List</h2>
+      <div class="row-fluid span8">
+         <div class="span10 ">
+           <h1>WikiWall - Details</h1>
+           <br />
+           <h2>Device Info</h1>
+           <br />
+           <table class="table">
+             <thead>
+               <tr class="offset1">
+               <th class="span4">Device ID</th>
+               <th class="span4">Room Name</th>
+             </thead>
+           <tbody>
+             <td class="span4"><strong>{{ box.box_id }}</strong></td>
+             <td class="span4"><strong>{{ box.box_name }}</strong></td>
+             <td>
+               <form action="." method="post" class="form-horizontal">
+                  {% csrf_token %}
+                  {% for field in editform %}
+                  <td>{{ field }}</td>
+                  <td>{{ field.errors }}</td>
+                  <td><input type="submit" value="Update" class="btn btn-primary btn-small"></input></td>
+                  {% endfor %}
+               </form>
+             </td>
+             </tbody>
+           </table>
+         </div>
+      </div> 
+
+      <div class="row-fluid span8">
+        <div class="span10">
+          <h2>Devices on Quick Share List</h2>
           <table class="table">
             <thead>
               <tr>
@@ -54,17 +56,28 @@
               </tr>
             </thead>
             <tbody>
-              {% for box in boxes %}
+              {% for box in sharing %}
               <tr id="{{ box.id }}">
-                <td>Hello World</td>
-                <td>box.name</td>
-                <td>box.location</td>
-                <td><a class="btn" href="/devices/unshare/{{ box.id }}/" </a></td>
+                <td>hello</td>
+                <td>{{ box.box_id }}</td>
+                <td>{{ box.box_name }}</td>
+                <td><a class="btn" href="/devices/sharelist/remove/{{ box.id }}/" </a>Remove</td>
              </tr>
               {% endfor %}
+             <td>
+               <form action="." method="post" class="form-horizontal">
+                  {% csrf_token %}
+                  {% for field in shareform %}
+                  <td>{{ field }}</td>
+                  <td>{{ field.errors }}</td>
+                  <td><input type="submit" value="Add" class="btn btn-primary btn-small"></input></td>
+                  {% endfor %}
+               </form>
+             </td>
+ 
             </tbody>
           </table>
           </div><!--/span-->
       </div>
     </div> 
-{% endblock %}
+    {% endblock %}

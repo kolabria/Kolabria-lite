@@ -11,7 +11,15 @@ from django import forms
 class BoxForm(MongoForm):
     class Meta:
         document = Box
-        fields = ('name', 'location')
+        fields = ('box_name', )
+
+class EditBoxForm(forms.Form):
+    box_name = forms.CharField(widget=forms.TextInput)
+
+
+class ShareBoxForm(forms.Form):
+    data = forms.CharField(widget=forms.TextInput(
+                 attrs={'placeholder': 'BoxID or Box Name'}))
 
 class UnsubWallForm(forms.Form):
     wid = forms.CharField(widget=forms.HiddenInput, required=False)
@@ -22,8 +30,8 @@ class PubWallForm(forms.Form):
 
 
 class NewBoxForm(forms.Form):
-    name = forms.CharField(widget=forms.TextInput)
-    location = forms.CharField(widget=forms.TextInput)
+    box_id = forms.CharField(widget=forms.TextInput)
+    box_name = forms.CharField(widget=forms.TextInput)
 
 class UpdateBoxForm(forms.Form):
     STATUS_CHOICES = (

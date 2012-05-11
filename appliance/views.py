@@ -10,10 +10,10 @@ from account.models import Account
 from login.models import UserProfile
 from walls.models import Wall
 from appliance.models import Box
-from appliance.forms import NewBoxForm, BoxForm, PubWallForm, UnsubWallForm
+from appliance.forms import NewBoxForm, EditBoxForm, BoxForm
+from appliance.forms import ShareBoxForm, PubWallForm, UnsubWallForm
 from datetime import datetime
 
-#import ipdb
 
 @login_required
 def appliances(request):
@@ -21,42 +21,65 @@ def appliances(request):
     boxes = Box.objects.filter(company=profile.company)
     form = NewBoxForm(request.POST or None)
     if form.is_valid():
-#        ipdb.set_trace()
-        box_name = request.POST['name']
-        box_location = request.POST['location']
+        box_id = request.POST['box_id']
+        box_name = request.POST['box_name']
         profile = UserProfile.objects.filter(
                                   user=request.user)[0]
         new_box = Box.objects.create(company=profile.company, owner=request.user,
-                                     name=box_name, location=box_location)
+                                     box_id=box_id, box_name=box_name)
         new_box.save()
-        msg = '%s %s %s' % (new_box.name, new_box.location,
+        msg = '%s %s %s' % (new_box.box_id, new_box.box_name,
                             profile.company.company) 
         messages.success(request, msg)
         return HttpResponseRedirect('/devices/')
-#        msg = 'name: %s   |   company: %s' % (company_name, company)
-#        messages.succes(request, msg)
     data = {'title': 'Kolabria - My Appliances',
-            'boxes': boxes, 
+            'boxes': boxes,
             'form': form, }
     return render_to_response('appliance/devices.html', data,
                        context_instance=RequestContext(request))
 
-def edit_box(request, bid):
-    boxes = Box.objects.get(id=bid)
-    """
-    if request.method == 'POST':
-        form = BoxForm(request.POST, instance=box)
-        if form.is_valid():
-            form.save()
-        return HttpResponseRedirect('/devices/')
-    else:
-        form = BoxForm(instance=box)
-    """
-    data = {'title': 'Kolabria - My Appliances',}
-#            'box': box, 
-#            'form': form, }
+def detail(request, bid):
+    box = Box.objects.get(id=bid)
+    sharing = [ Box.objects.get(id=id) for id in box.sharing ]
+    edit_form = EditBoxForm(request.POST or None)
+    if edit_form.is_valid():
+        box_name = request.POST['box_name']
+        box.box_name = box_name
+        box.save()
+        messages.success(request, 'Successfully updated box_id: %s' % box.box_id)
+        return HttpResponseRedirect('/devices/edit/%s' % box.id)
+     
+    share_form = ShareBoxForm(request.POST or None)
+    if share_form.is_valid():
+        data = request.POST['data']
+        box = Box.objects.get(box_id=data)
+        box.sharing.append(str(box.id))
+        box.save()
+        msg = 'Successfully added box_id: %s to QuickShare List' % box.box_id
+        messages.success(request, msg)
+        return HttpResponseRedirect('/devices/edit/%s' % box.id)
+
+    edit_form.fields['box_name'].initial = box.box_name
+    print type(sharing)
+    print sharing
+    data = {'title': 'Kolabria - My Appliances',
+            'box': box,
+            'editform': edit_form,
+            'shareform': share_form,
+            'sharing': sharing, }
     return render_to_response('appliance/detail.html', data,
                        context_instance=RequestContext(request))
+
+def unshare_box(request, bid):
+    profile = UserProfile.objects.get(user=request.user)
+    box = Box.objects.get(id=bid)
+    box.delete()
+    msg = 'Successfully removed appliance: %s %s %s' % (box.id,
+                                                        box.name,
+                                                        box.location)
+    messages.success(request, msg)
+    return HttpResponseRedirect('/devices/')
+
 
 @login_required
 def remove_box(request, bid):
@@ -75,7 +98,6 @@ def remove_box(request, bid):
 
 
 def auth_box(request):
-#    ipdb.set_trace()
     user_agent = request.META['HTTP_USER_AGENT']
     data = {'title': 'Kolabria - Valid Appliance ',}
     if user_agent[:4] == 'WWA-':
@@ -99,7 +121,6 @@ def auth_box(request):
 
 
 def the_box(request, bid):
-#    ipdb.set_trace()
     unsub_form = UnsubWallForm()
     pub_form = PubWallForm()
     box = Box.objects.get(id=bid)
@@ -119,76 +140,4 @@ def the_box(request, bid):
             'unsub_form': unsub_form }
 
     return render_to_response('appliance/detail.html', data,
-                       context_instance=RequestContext(request))
-
-
-def active_wall(request, wid):
-    wall = Wall.objects.get(id=wid)
-    data = {'title': 'Kolabria WikiWall Appliance | Active Wall: %s' % wall.name,
-            'wall': wall, }
-    return render_to_response('appliance/boxwall.html', data,
-                              context_instance=RequestContext(request))
-
-def pubwall(request, bid):
-#    ipdb.set_trace()
-    box = Box.objects.get(id=bid)
-    box_name = box.name
-    walls = [ Wall.objects.get(id=wid) for wid in box.walls ]
-
-    pub_form = PubWallForm(request.POST or None)
-
-    if pub_form.is_valid():
-        wid = request.POST['wid']
-        wall = Wall.objects.get(id=wid)
-        box = Box.objects.get(id=bid)
-        box.active_wall = request.POST['wid']
-        box.save()
-        messages.success(request, 'Wall: %s Activated on appliance: %s' % \
-                                                         (wall.name, box.name))
-        return HttpResponseRedirect('/box/%s' % box.id)
-
-    pub_form.initial['publish'] = True 
-
-    data = {'title': 'Kolabria | Publish WikiWall',
-            'box': box,
-            'bid': bid,
-            'box_name': box_name,
-            'walls': walls,
-            'pub_form': pub_form, }
-
-    return render_to_response('appliance/detail.html', data,
-                       context_instance=RequestContext(request))
-
-
-def unsubwall(request, bid):
-    unsub_form = UnsubWallForm(request.POST or None)
-    if unsub_form.is_valid():
-        box = Box.objects.get(id=bid)
-        wid = request.POST.get('wid')
-        wall = Wall.objects.get(id=wid)
-        if bid in wall.published:
-            wall.published.remove(bid)
-            wall.save()
-            messages.success(request, 'Box %s removed from wall.published %s' % \
-                                                                  (box.name, wall.name))
-        box = Box.objects.get(id=bid)
-        if wid in box.walls:
-            box.walls.remove(wid)
-            box.active_wall = ''
-            box.save()
-            messages.success(request, 'Box %s Unsubscribed from box.wall: %s' % \
-                                                                 (box.name, wid))
-        return HttpResponseRedirect('/box/')
-    
-    data = { 'bid': bid, 'unsub_form': unsub_form } #, 'walls': walls }
-    return render_to_response('appliance/detail.html', data,
-                       context_instance=RequestContext(request))
-
-
-def id_appliance(request, box_id):
-    box = Box.objects.get(id=box_id)
-    box_name = box.name
-    data = {'title': 'Kolabria | Manage Appliances | Appliance Detail',
-            'bux': box,}
-    render_to_response('apppliance/id-appliance.html', data,
                        context_instance=RequestContext(request))

@@ -12,10 +12,11 @@ class Box(Document):
     """
     company = ReferenceField(Account)
     owner = ReferenceField(User)
-    name = StringField(default='New Appliance', max_length=32, required=True)
-    location = StringField(max_length=100, required=False)
+    box_id = StringField(default='New Appliance', max_length=32, required=True)
+    box_name = StringField(max_length=100, required=False)
     active_wall = StringField(required=False)
     walls = ListField(StringField())
+    sharing = ListField(StringField())
 
     def __unicode__(self):
-        return self.name
+        return self.box_name
