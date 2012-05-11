@@ -8,7 +8,6 @@ from django.contrib import messages
 from mongoengine.django.auth import User
 from account.models import Account
 from account.forms import NewAccountForm
-import ipdb
 
 
 def public(request):

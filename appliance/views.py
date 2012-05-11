@@ -75,8 +75,8 @@ def unshare_box(request, bid):
     box = Box.objects.get(id=bid)
     box.delete()
     msg = 'Successfully removed appliance: %s %s %s' % (box.id,
-                                                        box.name,
-                                                        box.location)
+                                                        box.box_id,
+                                                        box.box_name)
     messages.success(request, msg)
     return HttpResponseRedirect('/devices/')
 
@@ -87,12 +87,13 @@ def remove_box(request, bid):
     profile = UserProfile.objects.get(user=request.user)
     box = Box.objects.get(id=bid)
     msg0 = info % (request.user, request.user.username, 
-                   profile.company, box.id, box.name)
+                   profile.company, box.box_id, box.box_name)
     messages.info(request, msg0)
     box.delete()
     msg1 = 'Successfully removed appliance: %s %s %s' % (box.id,
-                                                        box.name,
-                                                        box.location)
+                                                         box.box_id,
+                                                         box.box_name)
+    
     messages.success(request, msg1)
     return HttpResponseRedirect('/devices/')
 

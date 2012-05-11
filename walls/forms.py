@@ -24,7 +24,7 @@ class NewWallForm(forms.Form):
                               required=False)
     all_boxes = Box.objects.all()
     for box in all_boxes:
-        OPTIONS += ( box.id, box.name ),
+        OPTIONS += ( box.box_id, box.box_name),
     publish = forms.MultipleChoiceField(
                        widget=forms.SelectMultiple(
                                       attrs={'class': 'span4'}),
@@ -47,8 +47,8 @@ class PubWallForm(forms.Form):
     OPTIONS = ()
     all_boxes = Box.objects.all()
     for box in all_boxes:
-        box_title = '%s - %s' % (box.name, box.location)
-        OPTIONS += ( box.id, box_title ),
+        box_title = '%s - %s' % (box.box_id, box.box_name)
+        OPTIONS += ( box.box_id, box.box_name),
     publish = forms.MultipleChoiceField(
                        widget=forms.SelectMultiple(
                                       attrs={'class': 'controls span4'}),
