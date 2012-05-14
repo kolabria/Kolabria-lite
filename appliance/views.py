@@ -14,6 +14,7 @@ from appliance.forms import NewBoxForm, EditBoxForm, BoxForm
 from appliance.forms import ShareBoxForm, PubWallForm, UnsubWallForm
 from datetime import datetime
 
+import ipdb
 
 @login_required
 def appliances(request):
@@ -51,17 +52,17 @@ def detail(request, bid):
      
     share_form = ShareBoxForm(request.POST or None)
     if share_form.is_valid():
+        ipdb.set_trace()
         data = request.POST['data']
-        box = Box.objects.get(box_id=data)
-        box.sharing.append(str(box.id))
+        shared_box = Box.objects.get(box_id=data)
+        box.sharing.append(str(shared_box.id))
+#        messages.success(request, 'box_id: %s' % add_box.box_id)
         box.save()
-        msg = 'Successfully added box_id: %s to QuickShare List' % box.box_id
+        msg = 'Successfully added box_id: %s to QuickShare List' % shared_box.box_id
         messages.success(request, msg)
         return HttpResponseRedirect('/devices/edit/%s' % box.id)
 
     edit_form.fields['box_name'].initial = box.box_name
-    print type(sharing)
-    print sharing
     data = {'title': 'Kolabria - My Appliances',
             'box': box,
             'editform': edit_form,
@@ -73,7 +74,8 @@ def detail(request, bid):
 def unshare_box(request, bid):
     profile = UserProfile.objects.get(user=request.user)
     box = Box.objects.get(id=bid)
-    box.delete()
+    box.sharing.remove(bid)
+    box.save()
     msg = 'Successfully removed appliance: %s %s %s' % (box.id,
                                                         box.box_id,
                                                         box.box_name)
