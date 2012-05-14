@@ -14,7 +14,6 @@ from appliance.forms import NewBoxForm, EditBoxForm, BoxForm
 from appliance.forms import ShareBoxForm, PubWallForm, UnsubWallForm
 from datetime import datetime
 
-import ipdb
 
 @login_required
 def appliances(request):
@@ -52,7 +51,6 @@ def detail(request, bid):
      
     share_form = ShareBoxForm(request.POST or None)
     if share_form.is_valid():
-        ipdb.set_trace()
         data = request.POST['data']
         shared_box = Box.objects.get(box_id=data)
         box.sharing.append(str(shared_box.id))
