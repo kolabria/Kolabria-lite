@@ -26,7 +26,6 @@ def public(request):
 def create(request):
     form = NewAccountForm(request.POST or None)
     if form.is_valid():
-#        ipdb.set_trace()
         # create new user and save profile details; save new user
         username = request.POST['username']
         first_name = request.POST['first_name']

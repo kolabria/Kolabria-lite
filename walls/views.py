@@ -42,7 +42,6 @@ def create(request):
         name = wall.name
      
         invited_emails = request.POST.get('invited', '')
-#        ipdb.set_trace() 
         if invited_emails:
             invited_list = invited_emails.split(',')
             clean_emails = [ email.strip() for email in invited_list ]
@@ -321,7 +320,6 @@ def update(request, wid):
     update_form.fields['invited'].label = 'Invite new users by email address'
 
     if update_form.is_valid():
-#        ipdb.set_trace()
         # process invited if detected in POST
         if request.POST.get('invited'): 
             invited = request.POST.get('invited')
