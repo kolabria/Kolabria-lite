@@ -60,7 +60,7 @@
               <tr id="{{ shared.id }}">
                 <td>{{ shared.box_id }}</td>
                 <td>{{ shared.box_name }}</td>
-                <td><a class="btn" href="/devices/sharelist/remove/{{ box.id }}/" </a>Remove</td>
+                <td><a class="btn" href="/devices/{{ box.id }}/unshare/{{ shared.id }}/" </a>Remove</td>
              </tr>
               {% endfor %}
              <td>

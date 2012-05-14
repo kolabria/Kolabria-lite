@@ -69,16 +69,17 @@ def detail(request, bid):
     return render_to_response('appliance/detail.html', data,
                        context_instance=RequestContext(request))
 
-def unshare_box(request, bid):
+def unshare_box(request, bid, shared_id):
     profile = UserProfile.objects.get(user=request.user)
     box = Box.objects.get(id=bid)
-    box.sharing.remove(bid)
+    box.sharing.remove(shared_id)
     box.save()
-    msg = 'Successfully removed appliance: %s %s %s' % (box.id,
-                                                        box.box_id,
-                                                        box.box_name)
+    shared_box = Box.objects.get(id=shared_id)
+    msg = 'Successfully removed appliance: %s %s %s' % (shared_box.id,
+                                                        shared_box.box_id,
+                                                        shared_box.box_name)
     messages.success(request, msg)
-    return HttpResponseRedirect('/devices/')
+    return HttpResponseRedirect('/devices/edit/%s/' % box.id)
 
 
 @login_required
@@ -95,7 +96,7 @@ def remove_box(request, bid):
                                                          box.box_name)
     
     messages.success(request, msg1)
-    return HttpResponseRedirect('/devices/')
+    return HttpResponseRedirect('/devices/edit/%s/' % bid)
 
 
 def auth_box(request):
