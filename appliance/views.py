@@ -4,6 +4,7 @@ from django.template.context import RequestContext
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.forms.util import ValidationError
 
 from mongoengine.django.auth import User
 from account.models import Account
@@ -48,16 +49,19 @@ def detail(request, bid):
         box.save()
         messages.success(request, 'Successfully updated box_id: %s' % box.box_id)
         return HttpResponseRedirect('/devices/edit/%s' % box.id)
-     
+
     share_form = ShareBoxForm(request.POST or None)
     if share_form.is_valid():
         data = request.POST['data']
-        shared_box = Box.objects.get(box_id=data)
-        box.sharing.append(str(shared_box.id))
-#        messages.success(request, 'box_id: %s' % add_box.box_id)
-        box.save()
-        msg = 'Successfully added box_id: %s to QuickShare List' % shared_box.box_id
-        messages.success(request, msg)
+        try:
+            shared_box = Box.objects.filter(box_id=data)[0]
+            box.sharing.append(str(shared_box.id))
+            box.save()
+            messages.success(request, 'added box_id: %s to QuickShare' % \
+                                                        shared_box.box_id)
+        except:
+            msg = 'Error: Device not found matching %s' % data
+            messages.error(request, msg)
         return HttpResponseRedirect('/devices/edit/%s' % box.id)
 
     edit_form.fields['box_name'].initial = box.box_name
