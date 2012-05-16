@@ -63,16 +63,18 @@
                 <td><a class="btn" href="/devices/{{ box.id }}/unshare/{{ shared.id }}/" </a>Remove</td>
              </tr>
               {% endfor %}
-             <td>
+             <tr>
                <form action="." method="post" class="form-horizontal">
                   {% csrf_token %}
                   {% for field in shareform %}
                   <td>{{ field }}</td>
-                  <td>{{ field.errors }}</td>
                   <td><input type="submit" value="Add" class="btn btn-primary btn-small"></input></td>
                   {% endfor %}
                </form>
-             </td>
+             </tr>
+             <tr>
+                 <td>{{ field.errors }}</td>
+             </tr>
  
             </tbody>
           </table>
