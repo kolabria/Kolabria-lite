@@ -39,3 +39,21 @@ class NewAccountForm(forms.Form):
                            required=True)
 #    agree_terms = forms.BooleanField(widget=forms.CheckboxInput)
 
+
+class JoinMeetingForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(
+                           attrs={'placeholder': 'Your Name',
+                                  'class': 'span4'}),
+                           max_length=30,
+                           required=True)
+    room = forms.CharField(widget=forms.TextInput(
+                           attrs={'placeholder': 'Case Insensitive',
+                                  'class': 'span4'}),
+                           max_length=30,
+                           required=True)
+    code = forms.CharField(widget=forms.TextInput(
+                           attrs={'placeholder': '4-digit secret code',
+                                  'class': 'span4'}),
+                           max_length=30,
+                           required=True)
+

@@ -7,21 +7,33 @@ from django.contrib import messages
 
 from mongoengine.django.auth import User
 from account.models import Account
-from account.forms import NewAccountForm
+from account.forms import NewAccountForm, JoinMeetingForm
 
 
 def public(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/devices/')
     else:
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/home/')
 
 
-def public(request):
+def home(request):
     data = {'title': 'Kolabria - Homepage', }
     return render_to_response('public/home.html', data,
                               context_instance=RequestContext(request))
 
+def join(request):
+    form = JoinMeetingForm(request.POST or None)
+    if form.is_valid():
+       name = request.POST['name']
+       room = request.POST['room']
+       code = request.POST['code']
+       messages.success(request, '%s %s %s' % (name, room, code))
+       return HttpResponseRedirect('/walls/%s' % room) 
+    data = {'title': 'Kolabria - Join a WikiWall Meeting', 
+            'form': form }
+    return render_to_response('public/join.html', data,
+                              context_instance=RequestContext(request))
 """
 def create(request):
     form = NewAccountForm(request.POST or None)
