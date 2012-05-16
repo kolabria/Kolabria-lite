@@ -54,11 +54,20 @@ def detail(request, bid):
     if share_form.is_valid():
         data = request.POST['data']
         try:
-            shared_box = Box.objects.filter(box_id=data)[0]
+            shared_box = Box.objects.get(box_name=data)
             box.sharing.append(str(shared_box.id))
             box.save()
-            messages.success(request, 'added box_id: %s to QuickShare' % \
+            messages.success(request, 'Successfully added device: %s to QuickShare' % \
                                                         shared_box.box_id)
+        except:
+            pass
+
+        try:
+            shared_box = Box.objects.get(box_id=data)
+            box.sharing.append(str(shared_box.id))
+            box.save()
+            messages.success(request, 'Successfully added devie: %s to QuickShare' % \
+                                                        shared_box.box_name)
         except:
             msg = 'Error: Device not found matching %s' % data
             messages.error(request, msg)
