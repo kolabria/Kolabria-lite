@@ -5,6 +5,6 @@ import views
 
 urlpatterns = patterns('',
     url(r'^$', views.public),
-    url(r'^home$', views.home),
+    url(r'^home/$', views.home),
     url(r'^join/$', views.join),
 )
