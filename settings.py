@@ -21,13 +21,14 @@ AUTH_PROFILE_MODULE = 'login.UserProfile'
 
 # Database settings
 connect('kolabria-new')
+#connect('kolabria-324342')
 
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': True,
+    'INTERCEPT_REDIRECTS': False,
 }
 
 DEBUG_TOOLBAR_PANELS = (
@@ -104,7 +105,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'main',
+#    'main',
 )
 
 LOGGING = {
