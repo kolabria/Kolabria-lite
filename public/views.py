@@ -8,7 +8,10 @@ from django.contrib import messages
 from mongoengine.django.auth import User
 from account.models import Account
 from account.forms import NewAccountForm, JoinMeetingForm
+from appliance.models import Box
+from walls.models import Wall
 
+import ipdb
 
 def public(request):
     if request.user.is_authenticated():
@@ -25,50 +28,27 @@ def home(request):
 def join(request):
     form = JoinMeetingForm(request.POST or None)
     if form.is_valid():
+       ipdb.set_trace()
        name = request.POST['name']
        room = request.POST['room']
        code = request.POST['code']
-       messages.success(request, '%s %s %s' % (name, room, code))
-       return HttpResponseRedirect('/walls/%s' % room) 
+       request.session['name'] = name
+       try:
+           box = Box.objects.get(box_name=room)
+           wall_id = box.active_wall
+           wall = Wall.objects.get(id=wall_id)
+           if wall.code == int(code):
+               request.session['wid'] = str(wall.id)
+               messages.success(request, '%s %s %s' % (name, room, code))
+               return HttpResponseRedirect('/walls/%s' % str(wall.id))
+           else:
+               messages.error(request, 'Error: Invalid Code. Please try again.')
+               return HttpResponseRedirect('/join/')
+       except:
+           messages.error(request, 'Error: Device not found. Please try again')
+           return HttpResponseRedirect('/join')
+
     data = {'title': 'Kolabria - Join a WikiWall Meeting', 
             'form': form }
     return render_to_response('public/join.html', data,
                               context_instance=RequestContext(request))
-"""
-def create(request):
-    form = NewAccountForm(request.POST or None)
-    if form.is_valid():
-        # create new user and save profile details; save new user
-        username = request.POST['username']
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
-        company = request.POST['company']
-        password = request.POST['password2']
-        new_user = User.create_user(username=username, email=email,
-                                    password=password)
-        new_user.first_name = first_name
-        new_user.last_name = last_name
-        new_user.save()
-
-        # create the account instance
-        new_account = Account()
-        new_account.name = request.POST['company']
-
-        # set new user as admin for account instance; save account
-        new_account.admin = new_user
-        new_account.save()
-        messages.success(request, new_account)
-
-        # authenticate and log in user
-        auth_user = authenticate(username=username, password=password)
-        login(request=request, user=auth_user)
-        messages.success(request, 'Successfully logged in as %s' % \
-                                                           auth_user.username)
-#        slug = slugify(new_account.name)
-        return HttpResponseRedirect('/devices/')
-
-    data = {'title': 'Kolabria - Create a new Account ', 'form': form, }
-    return render_to_response('account/create.html', data,
-                              context_instance=RequestContext(request))
-"""

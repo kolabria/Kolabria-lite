@@ -1,6 +1,6 @@
 from mongoengine import connect, Document
 from mongoengine import ReferenceField, StringField, DateTimeField, ListField
-from mongoengine import ObjectIdField
+from mongoengine import ObjectIdField, IntField
 from mongoengine.django.auth import User
 
 from account.models import Account

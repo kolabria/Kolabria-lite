@@ -135,7 +135,7 @@ def walls(request):
 def view(request, wid):
     # Get a specific wall by Mongo object id
     wall = Wall.objects.get(id=wid)
-    data = {'title': 'Kolabria - Viewing Wall %s' % wall.name,
+    data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
             'wall': wall,}
     return render_to_response('walls/newwall.html', data, 
                               context_instance=RequestContext(request))
