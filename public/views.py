@@ -34,7 +34,7 @@ def join(request):
        code = request.POST['code']
        request.session['name'] = name
        try:
-           box = Box.objects.get(box_name=room)
+           box = Box.objects.get(box_name__iexact=room)
            wall_id = box.active_wall
            wall = Wall.objects.get(id=wall_id)
            if wall.code == int(code):

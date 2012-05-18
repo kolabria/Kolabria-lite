@@ -15,7 +15,7 @@ from walls.forms import PubWallForm, UnpubWallForm
 from walls.models import Wall
 from appliance.models import Box
 
-#import ipdb
+import ipdb
 
 # Legend of urls and views
 #walls             url(r'^walls/$', views.walls), 
@@ -131,12 +131,15 @@ def walls(request):
     return render_to_response('walls/mywalls.html', data,
                               context_instance=RequestContext(request))
 
-@login_required
 def view(request, wid):
+    ipdb.set_trace()
     # Get a specific wall by Mongo object id
     wall = Wall.objects.get(id=wid)
+    box_id = wall.box_id
+    box = Box.objects.get(box_id=box_id)
     data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
-            'wall': wall,}
+            'wall': wall,
+            'box': box, }
     return render_to_response('walls/newwall.html', data, 
                               context_instance=RequestContext(request))
 

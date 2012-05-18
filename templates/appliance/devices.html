@@ -29,7 +29,9 @@
             <tr class="offset1">
               <th>Device ID</th>
               <th>Device Name</th>
-              <th>Action</th>
+              <th>Edit</th>
+              <th>Remove</th>
+              <th>Box.id</th>
             </tr>
           </thead>
           <tbody>
@@ -39,6 +41,8 @@
               <td>{{ box.box_name }}</td>
               <td><a class="btn" href="/devices/edit/{{ box.id }}">edit</button></td>
               <td><a class="btn" href="/devices/remove/{{ box.id }}">remove</a></td>
+              <td>{{ box.id }}</td>
+
             </tr>
             {% endfor %}
 

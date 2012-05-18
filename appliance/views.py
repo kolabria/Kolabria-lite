@@ -93,6 +93,21 @@ def detail(request, bid):
     return render_to_response('appliance/detail.html', data,
                        context_instance=RequestContext(request))
 
+
+def reset(request, bid):
+    box = Box.objects.get(id=bid)
+    wid = box.active_wall
+    old_wall = Wall.objects.get(id=wid)
+    company = old_wall.company
+    old_wall.delete()
+    new_wall = Wall.objects.create(company=company, box_id=bid)
+    new_wall.save()
+    new_wid = str(new_wall.id)
+    box.active_wall = new_wid
+    box.save()
+    return HttpResponseRedirect('/walls/%s' % new_wid)
+
+
 def unshare_box(request, bid, shared_id):
     profile = UserProfile.objects.get(user=request.user)
     box = Box.objects.get(id=bid)
@@ -124,21 +139,24 @@ def remove_box(request, bid):
 
 
 def auth_box(request):
+#    ipdb.set_trace()
     user_agent = request.META['HTTP_USER_AGENT']
     data = {'title': 'Kolabria - Valid Appliance ',}
     if user_agent[:4] == 'WWA-':
         box_id = user_agent[4:]
         try:
             box = Box.objects.get(id=box_id)
+            wid = box.active_wall
+            wall = Wall.objects.get(id=wid)
             # authenticate box as user 
 #            user = User.objects.get(username=box_id)
 #            user.check_password(box_id)
 #            login(request, user)
 #            msg = "Success! Appliance ID (%s) == Valid username (%s)\n" % \
 #                                                     (box_id, user.username)
-            msg = "Recognized Appliance: %s id=%s" % (box.name, box_id)
+            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
             messages.success(request, msg)
-            return HttpResponseRedirect('/box/%s/' % box_id)
+            return HttpResponseRedirect('/walls/%s/' % wid)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)
             return HttpResponseRedirect('/')
@@ -150,7 +168,7 @@ def the_box(request, bid):
     unsub_form = UnsubWallForm()
     pub_form = PubWallForm()
     box = Box.objects.get(id=bid)
-    box_name = box.name
+#    box_name = box.box_name
     walls = Wall.objects.filter(published=str(box.id))
 
     if box.active_wall:
