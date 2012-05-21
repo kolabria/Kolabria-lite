@@ -15,7 +15,6 @@ from appliance.forms import NewBoxForm, EditBoxForm, BoxForm
 from appliance.forms import ShareBoxForm, PubWallForm, UnsubWallForm
 from datetime import datetime
 
-#import ipdb
 
 @login_required
 def appliances(request):
@@ -29,14 +28,18 @@ def appliances(request):
                                   user=request.user)[0]
         new_wall = Wall.objects.create(company=profile.company, box_id=box_id)
         new_wall.save()
-        new_box = Box.objects.create(company=profile.company, owner=request.user,
+        if Box.objects.get(box_id=box_id):
+            messages.error(request, 'Error: Device already registered with box_id: %s' % box_id)
+            return HttpResponseRedirect('/devices/')
+        else:
+            new_box = Box.objects.create(company=profile.company, owner=request.user,
                                      box_id=box_id, box_name=box_name, 
                                      active_wall=str(new_wall.id))
-        new_box.save()
-        msg = '%s %s %s' % (new_box.box_id, new_box.box_name,
-                            profile.company.company) 
-        messages.success(request, msg)
-        return HttpResponseRedirect('/devices/')
+            new_box.save()
+            msg = '%s %s %s' % (new_box.box_id, new_box.box_name,
+                                profile.company.company) 
+            messages.success(request, msg)
+            return HttpResponseRedirect('/devices/')
 
     data = {'title': 'Kolabria - My Appliances',
             'boxes': boxes,
