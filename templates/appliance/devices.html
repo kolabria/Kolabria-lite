@@ -31,17 +31,15 @@
               <th>Device Name</th>
               <th>Edit</th>
               <th>Remove</th>
-              <th>Box.id</th>
             </tr>
           </thead>
           <tbody>
               {% for box in boxes %}
-            <tr>
+            <tr class="span4">
               <td>{{ box.box_id }}</td>
               <td>{{ box.box_name }}</td>
               <td><a class="btn" href="/devices/edit/{{ box.id }}">edit</button></td>
               <td><a class="btn" href="/devices/remove/{{ box.id }}">remove</a></td>
-              <td>{{ box.id }}</td>
 
             </tr>
             {% endfor %}
