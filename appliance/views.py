@@ -133,13 +133,7 @@ def auth_box(request):
         box_id = user_agent[4:]
         try:
             box = Box.objects.get(id=box_id)
-            # authenticate box as user 
-#            user = User.objects.get(username=box_id)
-#            user.check_password(box_id)
-#            login(request, user)
-#            msg = "Success! Appliance ID (%s) == Valid username (%s)\n" % \
-#                                                     (box_id, user.username)
-            msg = "Recognized Appliance: %s id=%s" % (box.name, box_id)
+            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
             messages.success(request, msg)
             return HttpResponseRedirect('/box/%s/' % box_id)
         except Box.DoesNotExist:
@@ -153,7 +147,7 @@ def the_box(request, bid):
     unsub_form = UnsubWallForm()
     pub_form = PubWallForm()
     box = Box.objects.get(id=bid)
-    box_name = box.name
+    box_name = box.box_name
     walls = Wall.objects.filter(published=str(box.id))
 
     if box.active_wall:
