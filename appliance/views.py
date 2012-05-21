@@ -15,7 +15,6 @@ from appliance.forms import NewBoxForm, EditBoxForm, BoxForm
 from appliance.forms import ShareBoxForm, PubWallForm, UnsubWallForm
 from datetime import datetime
 
-#import ipdb
 
 @login_required
 def appliances(request):
@@ -29,14 +28,18 @@ def appliances(request):
                                   user=request.user)[0]
         new_wall = Wall.objects.create(company=profile.company, box_id=box_id)
         new_wall.save()
-        new_box = Box.objects.create(company=profile.company, owner=request.user,
+        if Box.objects.get(box_id=box_id):
+            messages.error(request, 'Error: Device already registered with box_id: %s' % box_id)
+            return HttpResponseRedirect('/devices/')
+        else:
+            new_box = Box.objects.create(company=profile.company, owner=request.user,
                                      box_id=box_id, box_name=box_name, 
                                      active_wall=str(new_wall.id))
-        new_box.save()
-        msg = '%s %s %s' % (new_box.box_id, new_box.box_name,
-                            profile.company.company) 
-        messages.success(request, msg)
-        return HttpResponseRedirect('/devices/')
+            new_box.save()
+            msg = '%s %s %s' % (new_box.box_id, new_box.box_name,
+                                profile.company.company) 
+            messages.success(request, msg)
+            return HttpResponseRedirect('/devices/')
 
     data = {'title': 'Kolabria - My Appliances',
             'boxes': boxes,
@@ -133,7 +136,7 @@ def remove_box(request, bid):
     msg1 = 'Successfully removed appliance: %s %s %s' % (box.id,
                                                          box.box_id,
                                                          box.box_name)
-    
+
     messages.success(request, msg1)
     return HttpResponseRedirect('/devices/edit/%s/' % bid)
 
@@ -148,12 +151,6 @@ def auth_box(request):
             box = Box.objects.get(id=box_id)
             wid = box.active_wall
             wall = Wall.objects.get(id=wid)
-            # authenticate box as user 
-#            user = User.objects.get(username=box_id)
-#            user.check_password(box_id)
-#            login(request, user)
-#            msg = "Success! Appliance ID (%s) == Valid username (%s)\n" % \
-#                                                     (box_id, user.username)
             msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
             messages.success(request, msg)
             return HttpResponseRedirect('/walls/%s/' % wid)
@@ -168,7 +165,7 @@ def the_box(request, bid):
     unsub_form = UnsubWallForm()
     pub_form = PubWallForm()
     box = Box.objects.get(id=bid)
-#    box_name = box.box_name
+    box_name = box.box_name
     walls = Wall.objects.filter(published=str(box.id))
 
     if box.active_wall:
