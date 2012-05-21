@@ -28,7 +28,12 @@ def appliances(request):
                                   user=request.user)[0]
         new_wall = Wall.objects.create(company=profile.company, box_id=box_id)
         new_wall.save()
-        if Box.objects.get(box_id=box_id):
+        try:
+            duplicate = Box.objects.get(box_id=box_id)
+        except:
+            duplicate = ''
+
+        if duplicate:
             messages.error(request, 'Error: Device already registered with box_id: %s' % box_id)
             return HttpResponseRedirect('/devices/')
         else:
