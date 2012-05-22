@@ -29,18 +29,21 @@ def join(request):
     form = JoinMeetingForm(request.POST or None)
     if form.is_valid():
        ipdb.set_trace()
-       name = request.POST['name']
-       room = request.POST['room']
-       code = request.POST['code']
-       request.session['name'] = name
+       name = request.session['name'] = request.POST['name']
+       room = request.session['room'] = request.POST['room']
+       code = request.session['code']  = request.POST['code']
        try:
            box = Box.objects.get(box_name__iexact=room)
-           wall_id = box.active_wall
-           wall = Wall.objects.get(id=wall_id)
+           wall = Wall.objects.get(id=box.active_wall)
            if wall.code == int(code):
                request.session['wid'] = str(wall.id)
+               request.session['auth'] = True
                messages.success(request, '%s %s %s' % (name, room, code))
-               return HttpResponseRedirect('/walls/%s' % str(wall.id))
+               messages.success(request, '%s %s %s' % (request.session['wid'],
+                                                       request.session['auth'],
+                                                       request.session))
+               return HttpResponseRedirect('/wikiwall/%s' % box.box_id)
+#               return HttpResponseRedirect('/walls/%s' % str(wall.id))
            else:
                messages.error(request, 'Error: Invalid Code. Please try again.')
                return HttpResponseRedirect('/join/')

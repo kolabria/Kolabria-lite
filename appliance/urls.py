@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^box/$', views.auth_box),
     url(r'^box/(?P<bid>\w+)/$', views.the_box),
     url(r'^appliances/$', views.appliances),
+    url(r'^wikiwall/(?P<box_id>\w+)/$', views.wikiwall),
 )

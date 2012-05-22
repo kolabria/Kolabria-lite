@@ -39,7 +39,7 @@ def create(request):
         wall.save()
         wid = wall.id
         name = wall.name
-     
+
         invited_emails = request.POST.get('invited', '')
         if invited_emails:
             invited_list = invited_emails.split(',')
@@ -142,12 +142,24 @@ def view(request, wid):
                               context_instance=RequestContext(request))
 
 
+
+def reset_wall(request, wid):
+    wall = Wall.objects.get(id=wid)
+    wall.delete()
+    msg = 'Successfully reset appliance'
+    messages.success(request, msg)
+    return HttpResponseRedirect('/box/')
+
+
+"""
 def wikiwall(request, box_id):
-   box = Box.objects.get(box_id=box_id)
-   wid = box.active_wall
-   wall = Wall.objects.get(id=wid)
-   data = ('title': 'Kolabria - WikiWall %s' % box.box_id,
-           'box': box,
-           'wall': wall }
-   return render_to_response('walls/wikiwall.html', data,
-                             context_instance=RequestContext(request))
+    ipdb.set_trace() 
+    box = Box.objects.get(box_id=box_id)
+    wid = box.active_wall
+    wall = Wall.objects.get(id=wid)
+    data = ('title': 'Kolabria - WikiWall',
+            'box': box,
+            'wall': wall, }
+    return render_to_response('walls/wikiwall.html', data,
+                              context_instance=RequestContext(request)
+"""

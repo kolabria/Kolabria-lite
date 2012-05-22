@@ -100,6 +100,20 @@ def detail(request, box_id):
                        context_instance=RequestContext(request))
 
 
+def wikiwall(request, box_id):
+    if request.session['auth'] is not True:
+        messages.warning(request, 'Error: Not Authorized')
+        return HttpResponseRedirect('/join/')
+    else:
+        wall = Wall.objects.get(id=request.session['wid'])
+        box = Box.objects.get(box_id=box_id)
+        data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
+                'wall': wall,
+                'box': box, }
+        return render_to_response('walls/newwall.html', data, 
+                                  context_instance=RequestContext(request))
+
+
 def reset(request, bid):
     box = Box.objects.get(id=bid)
     wid = box.active_wall
