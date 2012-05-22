@@ -127,17 +127,17 @@ def reset(request, bid):
     return HttpResponseRedirect('/walls/%s' % new_wid)
 
 
-def unshare_box(request, bid, shared_id):
+def unshare_box(request, box_id, shared_id):
     profile = UserProfile.objects.get(user=request.user)
-    box = Box.objects.get(id=bid)
+    box = Box.objects.get(box_id=box_id)
     box.sharing.remove(shared_id)
     box.save()
-    shared_box = Box.objects.get(id=shared_id)
+    shared_box = Box.objects.get(box_id=shared_id)
 #    msg = 'Successfully removed appliance: %s %s %s' % (shared_box.id,
 #                                                        shared_box.box_id,
 #                                                        shared_box.box_name)
 #    messages.success(request, msg)
-    return HttpResponseRedirect('/devices/edit/%s/' % box.id)
+    return HttpResponseRedirect('/devices/edit/%s/' % box.box_id)
 
 
 @login_required
