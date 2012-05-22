@@ -15,7 +15,6 @@ from appliance.forms import NewBoxForm, EditBoxForm, BoxForm
 from appliance.forms import ShareBoxForm, PubWallForm, UnsubWallForm
 from datetime import datetime
 
-import ipdb
 
 @login_required
 def appliances(request):
@@ -62,7 +61,6 @@ def detail(request, box_id):
         messages.success(request, 'Successfully updated box_id: %s' % box.box_id)
         return HttpResponseRedirect('/devices/edit/%s' % box.box_id)
 
-#    ipdb.set_trace()
     share_form = ShareBoxForm(request.POST or None)
     if share_form.is_valid():
         data = request.POST['data']
@@ -88,14 +86,15 @@ def detail(request, box_id):
 #            msg = 'Error: Device not found matching %s' % data
 #            messages.error(request, msg)
         return HttpResponseRedirect('/devices/edit/%s' % box_id)
-
-    sharing = [ Box.objects.get(box_id=box_id) for box_id in box.sharing ]
+    print box.sharing
+    sharing = [ Box.objects.get(box_id=boxid) for boxid in box.sharing ]
     edit_form.fields['box_name'].initial = box.box_name
     data = {'title': 'Kolabria - My Appliances',
             'box': box,
             'editform': edit_form,
             'shareform': share_form,
-            'sharing': sharing, }
+            'sharing': sharing, 
+            }
     return render_to_response('appliance/detail.html', data,
                        context_instance=RequestContext(request))
 
@@ -142,10 +141,10 @@ def unshare_box(request, bid, shared_id):
 
 
 @login_required
-def remove_box(request, bid):
+def remove_box(request, box_id):
     info = """user: %s | username: %s |  company: %s | box: %s | box_name: %s"""
     profile = UserProfile.objects.get(user=request.user)
-    box = Box.objects.get(id=bid)
+    box = Box.objects.get(box_id=box_id)
     msg0 = info % (request.user, request.user.username, 
                    profile.company, box.box_id, box.box_name)
     messages.info(request, msg0)
@@ -155,11 +154,10 @@ def remove_box(request, bid):
                                                          box.box_name)
 
     messages.success(request, msg1)
-    return HttpResponseRedirect('/devices/edit/%s/' % bid)
+    return HttpResponseRedirect('/devices/edit/%s/' % box_id)
 
 
 def auth_box(request):
-    ipdb.set_trace()
     user_agent = request.META['HTTP_USER_AGENT']
     data = {'title': 'Kolabria - Valid Appliance ',}
     if user_agent[:3] == 'WWA' or 'wwa':
