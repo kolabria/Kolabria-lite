@@ -1,5 +1,6 @@
 *.pyc
 *.swo
 *.swp
+todo.txt
 data/
 venv/
