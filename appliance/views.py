@@ -101,7 +101,8 @@ def detail(request, box_id):
 
 
 def wikiwall(request, box_id):
-    if request.session['auth'] is not True:
+    ipdb.set_trace()
+    if 'auth' not in request.session:
         messages.warning(request, 'Error: Not Authorized')
         return HttpResponseRedirect('/join/')
     else:

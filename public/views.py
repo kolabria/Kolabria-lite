@@ -28,7 +28,6 @@ def home(request):
 def join(request):
     form = JoinMeetingForm(request.POST or None)
     if form.is_valid():
-       ipdb.set_trace()
        name = request.session['name'] = request.POST['name']
        room = request.session['room'] = request.POST['room']
        code = request.session['code']  = request.POST['code']
@@ -46,7 +45,7 @@ def join(request):
 #               return HttpResponseRedirect('/walls/%s' % str(wall.id))
            else:
                messages.error(request, 'Error: Invalid Code. Please try again.')
-               return HttpResponseRedirect('/join/')
+               pass
        except:
            messages.error(request, 'Error: Device not found. Please try again')
            return HttpResponseRedirect('/join')
