@@ -154,7 +154,7 @@ def remove_box(request, box_id):
                                                          box.box_name)
 
     messages.success(request, msg1)
-    return HttpResponseRedirect('/devices/edit/%s/' % box_id)
+    return HttpResponseRedirect('/devices/')
 
 
 def auth_box(request):
