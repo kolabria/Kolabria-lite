@@ -62,7 +62,7 @@ def detail(request, box_id):
         messages.success(request, 'Successfully updated box_id: %s' % box.box_id)
         return HttpResponseRedirect('/devices/edit/%s' % box.box_id)
 
-    ipdb.set_trace()
+#    ipdb.set_trace()
     share_form = ShareBoxForm(request.POST or None)
     if share_form.is_valid():
         data = request.POST['data']
@@ -101,7 +101,6 @@ def detail(request, box_id):
 
 
 def wikiwall(request, box_id):
-    ipdb.set_trace()
     if 'auth' not in request.session:
         messages.warning(request, 'Error: Not Authorized')
         return HttpResponseRedirect('/join/')
@@ -160,17 +159,21 @@ def remove_box(request, bid):
 
 
 def auth_box(request):
+    ipdb.set_trace()
     user_agent = request.META['HTTP_USER_AGENT']
     data = {'title': 'Kolabria - Valid Appliance ',}
-    if user_agent[:4] == 'WWA-':
-        box_id = user_agent[4:]
+    if user_agent[:3] == 'WWA' or 'wwa':
+        box_id = user_agent
         try:
-            box = Box.objects.get(id=box_id)
+            box = Box.objects.get(box_id__iexact=box_id)
             wid = box.active_wall
             wall = Wall.objects.get(id=wid)
+            request.session['auth'] = True
+            request.session['wid'] = wid
             msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
             messages.success(request, msg)
-            return HttpResponseRedirect('/walls/%s/' % wid)
+            return HttpResponseRedirect('/wikiwall/%s' % box.box_id)
+#            return HttpResponseRedirect('/walls/%s/' % wid)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)
             return HttpResponseRedirect('/')
