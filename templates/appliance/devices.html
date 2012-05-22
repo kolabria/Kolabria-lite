@@ -38,9 +38,8 @@
             <tr class="span4">
               <td>{{ box.box_id }}</td>
               <td>{{ box.box_name }}</td>
-              <td><a class="btn" href="/devices/edit/{{ box.id }}">edit</button></td>
-              <td><a class="btn" href="/devices/remove/{{ box.id }}">remove</a></td>
-
+              <td><a class="btn" href="/devices/edit/{{ box.box_id }}">edit</button></td>
+              <td><a class="btn" href="/devices/remove/{{ box.box_id }}">remove</a></td>
             </tr>
             {% endfor %}
 

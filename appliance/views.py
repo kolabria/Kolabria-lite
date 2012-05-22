@@ -15,6 +15,7 @@ from appliance.forms import NewBoxForm, EditBoxForm, BoxForm
 from appliance.forms import ShareBoxForm, PubWallForm, UnsubWallForm
 from datetime import datetime
 
+import ipdb
 
 @login_required
 def appliances(request):
@@ -52,37 +53,33 @@ def appliances(request):
     return render_to_response('appliance/devices.html', data,
                        context_instance=RequestContext(request))
 
-def detail(request, bid):
-    box = Box.objects.get(id=bid)
-    sharing = [ Box.objects.get(id=id) for id in box.sharing ]
+def detail(request, box_id):
+    box = Box.objects.get(box_id=box_id)
     edit_form = EditBoxForm(request.POST or None)
     if edit_form.is_valid():
-        box_name = request.POST['box_name']
-        box.box_name = box_name
+        box.box_name = request.POST['box_name']
         box.save()
-#        messages.success(request, 'Successfully updated box_id: %s' % box.box_id)
-        return HttpResponseRedirect('/devices/edit/%s' % box.id)
+        messages.success(request, 'Successfully updated box_id: %s' % box.box_id)
+        return HttpResponseRedirect('/devices/edit/%s' % box.box_id)
 
+    ipdb.set_trace()
     share_form = ShareBoxForm(request.POST or None)
     if share_form.is_valid():
         data = request.POST['data']
-#        ipdb.set_trace()
         try:
             shared_box = Box.objects.get(box_name__iexact=data)
-            if shared_box.id not in box.sharing:
-                box.sharing.append(str(shared_box.id))
+            if shared_box.box_id not in box.sharing:
+                box.sharing.append(str(shared_box.box_id))
                 box.save()
-#                messages.success(request, 'Successfully added device: %s to QuickShare' % \
-#                                                                          shared_box.box_id)
-            else:
-                pass
+#            if shared_box.box_id not in box.sharing:
+                # and shared_box.box_id != box_id
         except:
             pass
 
         try:
             shared_box = Box.objects.get(box_id__iexact=data)
-            if shared_box.id not in box.sharing:
-                box.sharing.append(str(shared_box.id))
+            if shared_box.box_id not in box.sharing:
+                box.sharing.append(str(shared_box.box_id))
                 box.save()
 #                messages.success(request, 'Successfully added device: %s to QuickShare' % \
 #                                                                          shared_box.box_name)
@@ -90,8 +87,9 @@ def detail(request, bid):
             pass
 #            msg = 'Error: Device not found matching %s' % data
 #            messages.error(request, msg)
-        return HttpResponseRedirect('/devices/edit/%s' % box.id)
+        return HttpResponseRedirect('/devices/edit/%s' % box_id)
 
+    sharing = [ Box.objects.get(box_id=box_id) for box_id in box.sharing ]
     edit_form.fields['box_name'].initial = box.box_name
     data = {'title': 'Kolabria - My Appliances',
             'box': box,
@@ -147,7 +145,6 @@ def remove_box(request, bid):
 
 
 def auth_box(request):
-#    ipdb.set_trace()
     user_agent = request.META['HTTP_USER_AGENT']
     data = {'title': 'Kolabria - Valid Appliance ',}
     if user_agent[:4] == 'WWA-':
