@@ -86,7 +86,7 @@ def detail(request, box_id):
 #            msg = 'Error: Device not found matching %s' % data
 #            messages.error(request, msg)
         return HttpResponseRedirect('/devices/edit/%s' % box_id)
-    print box.sharing
+
     sharing = [ Box.objects.get(box_id=boxid) for boxid in box.sharing ]
     edit_form.fields['box_name'].initial = box.box_name
     data = {'title': 'Kolabria - My Appliances',
