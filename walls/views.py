@@ -142,24 +142,34 @@ def view(request, wid):
                               context_instance=RequestContext(request))
 
 
-
-def reset_wall(request, wid):
+def reset_box(request, box_id):
+    """
+    To be called from initiating Device.
+    Flushes the currently active wall.
+    Generates a new wall with a new wall.code
+    """
+    box = Box.objects.get(box_id=box_id)
+    wid = box.active_wall
     wall = Wall.objects.get(id=wid)
     wall.delete()
-    msg = 'Successfully reset appliance'
+    box.active_wall = ''
+    new_wall = Wall.objects.create(company=box.company,
+                                   box_id=box.box_id)
+    new_wall.save()
+    box.active_wall = str(new_wall.id)
+    box.save()
+    msg = 'Successfully reset appliance. New Code: %s' % new_wall.code
     messages.success(request, msg)
     return HttpResponseRedirect('/box/')
 
 
-"""
-def wikiwall(request, box_id):
-    ipdb.set_trace() 
+def restore_box(request, box_id):
+    ipdb.set_trace()
     box = Box.objects.get(box_id=box_id)
     wid = box.active_wall
     wall = Wall.objects.get(id=wid)
-    data = ('title': 'Kolabria - WikiWall',
-            'box': box,
-            'wall': wall, }
-    return render_to_response('walls/wikiwall.html', data,
-                              context_instance=RequestContext(request)
-"""
+    wall.delete()
+
+    msg = 'Successfully reset appliance'
+    messages.success(request, msg)
+    return HttpResponseRedirect('/box/')
