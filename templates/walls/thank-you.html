@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Kolabria WikiWall - Thank You for using WikiWall by Kolabria
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+      <div class="row-fluid">
+
+      <div class="span6 offset3">
+      {% if messages %}
+        <div class="messages alert alert-block alert-info">
+        <a class="close" data-dismiss="alert">×</a>
+        {% for message in messages %}
+          <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+        {% endfor %}
+        </ul>
+      {% endif %}  
+        </div><!-- alert-block -->
+      </div><!--/span6 -->
+
+      <div class="span6 offset3">
+        <div class="hero-unit well">
+          <h3>Your session has completed.</h3>
+          <br />
+          <h3>Please, tell us about your experience:</h3>
+          <p>Embed Wufoo form or Google Docs form here</p>
+        </div><!--/span-->
+    </div><!--row -->
+{% endblock %}
