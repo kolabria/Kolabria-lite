@@ -45,7 +45,7 @@ def view_master_box(request, wid):
     data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
             'wall': wall,
             'box': box, }
-    return render_to_response('walls/initiator-wall.html', data, 
+    return render_to_response('walls/master-wall.html', data, 
                               context_instance=RequestContext(request))
 
 def view_slave_box(request, wid):
@@ -56,7 +56,7 @@ def view_slave_box(request, wid):
     data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
             'wall': wall,
             'box': box, }
-    return render_to_response('walls/initiator-wall.html', data, 
+    return render_to_response('walls/slave-wall.html', data, 
                               context_instance=RequestContext(request))
 
 
@@ -82,20 +82,18 @@ def reset_box(request, box_id):
     return HttpResponseRedirect('/box/')
 
 
-def restore_receiver_box(request, box_id):
-    ipdb.set_trace()
+def restore_box(request, box_id):
     box = Box.objects.get(box_id=box_id)
     wid = box.active_wall
     wall = Wall.objects.get(id=wid)
     wall.delete()
 
-    msg = 'Successfully reset appliance'
+    msg = 'Restore appliance -- not yet implemented'
     messages.success(request, msg)
     return HttpResponseRedirect('/box/')
 
 
 def quit_box(request, box_id):
-    ipdb.set_trace()
     box = Box.objects.get(box_id=box_id)
     wid = box.active_wall
     wall = Wall.objects.get(id=wid)
