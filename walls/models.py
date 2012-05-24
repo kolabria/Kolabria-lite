@@ -33,8 +33,6 @@ class Wall(Document):
         """
         return self.box_id
 
-    def clean(self):
-        # check appliance_id is valid before appending id to Wall.published 
-        for id in published:
-            if not Box.objects.get(id=id):
-                raise ValidationError('Invalid Appliance_id: %s' % id)
+    def clean_box_id(self):
+        if Box.objects.get(box_id=self.box_id):
+            raise ValidationError('Duplicate Appliance_id: %s' % self.box_id)
