@@ -199,8 +199,8 @@ def auth_box(request):
             wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
             request.session['wid'] = wid
-            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
-            messages.success(request, msg)
+#            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
+#            messages.success(request, msg)
             return HttpResponseRedirect('/wikiwall/%s' % box.box_id)
 #            return HttpResponseRedirect('/walls/%s/' % wid)
         except Box.DoesNotExist:
@@ -220,8 +220,8 @@ def master(request):
             wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
             request.session['wid'] = wid
-            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
-            messages.success(request, msg)
+#            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
+#            messages.success(request, msg)
             return HttpResponseRedirect('/wikiwallm/%s' % box.box_id)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)
@@ -241,8 +241,8 @@ def slave(request):
             wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
             request.session['wid'] = wid
-            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
-            messages.success(request, msg)
+#            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
+#            messages.success(request, msg)
             return HttpResponseRedirect('/wikiwalls/%s' % box.box_id)
 #            return HttpResponseRedirect('/walls/%s/' % wid)
         except Box.DoesNotExist:
