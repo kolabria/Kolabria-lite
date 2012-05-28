@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="viewport" content="width=device-width, height=device-height user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi">	
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi">
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
@@ -14,8 +14,6 @@
     <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}images/apple-touch-icon-114x114.png">
 
     <title>{% block title %}Kolabria WikiWall - Real-time Collaborative Whiteboard{% endblock title %}</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
 
     {% block styles %}
     <!-- Le styles -->
@@ -30,7 +28,6 @@
         padding: 9px 0;
       }
     </style>
-    <link href="{{ STATIC_URL }}css/bootstrap-responsive.css"  rel="stylesheet">
     {% endblock styles %}
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
