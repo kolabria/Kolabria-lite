@@ -18,23 +18,21 @@
     <nav id="toolbar" class="toolbar">
   		<ul class="navigation">
         <li><input type="button" value="Pen" class="tool"></li>
-        <ul>
-          <li><input type="button" value="Black" class="color"></li>
-          <li><input type="button" value="Red" class="color"></li>
-          <li><input type="button" value="Green" class="color"></li>
-        </ul>
+        <li><input type="button" value="Black" class="color"></li>
+        <li><input type="button" value="Red" class="color"></li>
+        <li><input type="button" value="Green" class="color"></li>   | 
+        <li><a href="/settings/" class="settings">Settings</a></li>  |  
+        <li><a href="/walls/reset/{{ wall.box_id }}" class="quit">quit</a></li>
+      </ul>
+      <ul>
         <li><input type="button" value="Nav" class="tool"></li>
-        <ul>
-          <li><input type="button" value="ZoomIn" class="tool"></li>
-          <li><input type="button" value="Center" class="tool"></li>
-          <li><input type="button" value="ZoomOut" class="tool"></li>
-        </ul>
+        <li><input type="button" value="ZoomIn" class="tool"></li>
+        <li><input type="button" value="Center" class="tool"></li>
+        <li><input type="button" value="ZoomOut" class="tool"></li> | 
         <li><input type="button" value="Select" class="tool"></li>
         <li><input type="button" value="Share" class="share"></li>
         <li><input type="button" value="Shared" class="share"></li>
         <li><input type="button" value="Users" class="share"></li>
-        <li><a href="/settings/" class="settings">Settings</a></li>
-        <li><a href="/walls/reset/{{ wall.box_id }}" class="quit">quit</a></li>
       </ul>
     </nav>
       <h1>box_id: {{ wall.box_id }} | Room: {{ box.box_name }} |  code: {{ wall.code }}</h1>
