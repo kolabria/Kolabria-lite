@@ -3,12 +3,12 @@
 {% block title %} Kolabria Wikiwall - Master | {{ wall.name }} {% endblock title %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/wall.css">
-    <script src="{{ STATIC_URL }}js/paper.js"></script>
-    <script src="{{ STATIC_URL }}js/ios.js"></script>
-    <script src="//code.jquery.com/jquery-latest.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
-    <script src="{{ STATIC_URL }}/js/touch-punch.min.js"></script>
+    <link rel="stylesheet" href="http://points.kolabria.com/stylesheets/wall.css">
+    <script src="http://points.kolabria.com/javascripts/paper.js"></script>
+    <script src="http://points.kolabria.com/javascripts/ios.js "></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script src="http://points.kolabria.com/javascripts/touch-punch.min.js"></script>
     <script src="http://points.kolabria.com/nowjs/now.js">
     </script><!--this is what allows realtime communication -->
 {% endblock styles %}
@@ -46,7 +46,7 @@
     <canvas id="myCanvas" resize></canvas>
   </div>
   <div class="navWindow">
-    <div view></div>
+ <div view></div>
   </div>
   <div class="shareTo">
     <h2>{{ wall.code }}</h2>
@@ -67,6 +67,6 @@
       //              Django side
     </script>
 
-    <script src="{{ STATIC_URL }}js/wall.js" canvas="myCanvas" type="text/paperscript"></script>
-    <script src="{{ STATIC_URL }}js/master.js" canvas="myCanvas" type="text/paperscript"></script>
+    <script src="http://points.kolabria.com/javascripts/wall.js" canvas="myCanvas" type="text/paperscript"></script>
+    <script src="http://points.kolabria.com/javascripts/master.js" canvas="myCanvas" type="text/paperscript"></script>
 {% endblock js %}

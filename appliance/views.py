@@ -110,7 +110,8 @@ def wikiwall(request, box_id):
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, }
-        return render_to_response('walls/newwall.html', data, 
+#        return render_to_response('walls/newwall.html', data, 
+        return render_to_response('walls/client-view.jade', data, 
                                   context_instance=RequestContext(request))
 
 
@@ -138,7 +139,7 @@ def wikiwalls(request, box_id):
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, }
-        return render_to_response('walls/slave-wall.html', data, 
+        return render_to_response('walls/slave-device.jade', data, 
                                   context_instance=RequestContext(request))
 
 
