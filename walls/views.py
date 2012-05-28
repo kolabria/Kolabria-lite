@@ -79,7 +79,7 @@ def reset_box(request, box_id):
     box.save()
     msg = 'Successfully reset appliance. New Code: %s' % new_wall.code
     messages.success(request, msg)
-    return HttpResponseRedirect('/box/')
+    return HttpResponseRedirect('/master/')
 
 
 def restore_box(request, box_id):
