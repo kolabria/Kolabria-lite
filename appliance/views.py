@@ -111,7 +111,7 @@ def wikiwall(request, box_id):
                 'wall': wall,
                 'box': box, }
 #        return render_to_response('walls/newwall.html', data, 
-        return render_to_response('walls/client-view.jade', data, 
+        return render_to_response('walls/client-wall.html', data, 
                                   context_instance=RequestContext(request))
 
 

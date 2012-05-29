@@ -7,7 +7,7 @@
 {% block content %}
     <div class="container-fluid">
       <div class="row-fluid">
-
+{% comment %}
       <div class="span6 offset3">
       {% if messages %}
         <div class="messages alert alert-block alert-info">
@@ -19,13 +19,14 @@
       {% endif %}  
         </div><!-- alert-block -->
       </div><!--/span6 -->
-
+{% endcomment %}
       <div class="span6 offset3">
         <div class="hero-unit well">
           <h3>Your session has completed.</h3>
           <br />
           <h3>Please, tell us about your experience:</h3>
           <p>Embed Wufoo form or Google Docs form here</p>
+          <iframe src="https://docs.google.com/spreadsheet/embeddedform?formkey=dEJ6clF1c3pNVVlORWdQUDJTenpzQWc6MQ" width="760" height="746" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe> 
         </div><!--/span-->
     </div><!--row -->
 {% endblock %}

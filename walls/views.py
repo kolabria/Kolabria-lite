@@ -93,14 +93,6 @@ def restore_box(request, box_id):
     return HttpResponseRedirect('/box/')
 
 
-def quit_box(request, box_id):
-    box = Box.objects.get(box_id=box_id)
-    wid = box.active_wall
-    wall = Wall.objects.get(id=wid)
-    wall.delete()
-    return HttpResponseRedirect('/thank-you/')
-
-
 def thank_you(request):
     data = {'title': 'Kolabria - Session Complete - Feedback Form',
            }

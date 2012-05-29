@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %} Kolabria Wikiwall - Client | {{ wall.name }} {% endblock title %}
+
+{% block styles %}
+    <link rel="stylesheet" href="http://points.kolabria.com/stylesheets/wall.css">
+    <script src="http://points.kolabria.com/javascripts/paper.js"></script>
+    <script src="http://points.kolabria.com/javascripts/ios.js "></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script src="http://points.kolabria.com/javascripts/touch-punch.min.js"></script>
+    <script src="http://points.kolabria.com/javascripts/worker.js"></script>
+    <script src="http://points.kolabria.com/nowjs/now.js"></script><!--this is what allows realtime communication -->
+{% endblock styles %}
+
+{% block navbar %}
+	<header>
+    <nav id="toolbar" class="toolbar">
+  		<ul class="navigation">
+        <li><input type="button" value="Pen" class="tool"></li>
+        <li><input type="button" value="Black" class="color"></li>
+        <li><input type="button" value="Red" class="color"></li>
+        <li><input type="button" value="Green" class="color"></li>   | 
+        <li><a href="/settings/" class="settings">Settings</a></li>  |  
+        <li><a href="/walls/thank-you/" class="quit">quit</a></li>
+      </ul>
+      <ul>
+        <li><input type="button" value="Nav" class="tool"></li>
+        <li><input type="button" value="ZoomIn" class="tool"></li>
+        <li><input type="button" value="Center" class="tool"></li>
+        <li><input type="button" value="ZoomOut" class="tool"></li> | 
+        <li><input type="button" value="Select" class="tool"></li>
+        <li><input type="button" value="Share" class="share"></li>
+        <li><input type="button" value="Shared" class="share"></li>
+        <li><input type="button" value="Users" class="share"></li>
+      </ul>
+    </nav>
+      <h1>box_id: {{ wall.box_id }} | Room: {{ box.box_name }} |  code: {{ wall.code }}</h1>
+	</header>
+{% endblock navbar %}
+
+{% block content %}
+  <div class="whiteboard">
+    <canvas id="myCanvas" resize></canvas>
+  </div>
+  <div class="navWindow">
+ <div view></div>
+  </div>
+  <div class="shareTo">
+    <h2>{{ wall.code }}</h2>
+  </div>
+{% endblock content %}
+
+{% block js %}
+    <script>
+      var wallId = '{{ wall.id }}';
+      var wallsArray = [ {% for wall in walls %} "{{ wall.id }}", {% endfor %} ]
+      var companyId = '{{ wall.company.id }}'; //from application 
+      var boxID = '{{ box.box_id }}'; //from application 
+      var box_name = '{{ box.box_name }}'; //from application 
+      // Does Django need to store anything for permissions?
+      // or do we assume because it's on the approved share list that all is good.
+      // -- response: No we process each request and test for auth,
+      //              then store the auth token in the session cookie from the 
+      //              Django side
+    </script>
+
+    <script src="{{ STATIC_URL }}js/wall.js" canvas="myCanvas" type="text/paperscript"></script>
+    {% comment %}
+    <script src="http://points.kolabria.com/javascripts/wall.js" canvas="myCanvas" type="text/paperscript"></script>
+    {% endcomment %}
+    <script src="http://points.kolabria.com/javascripts/master.js" canvas="myCanvas" type="text/paperscript"></script>
+{% endblock js %}
