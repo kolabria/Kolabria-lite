@@ -70,7 +70,7 @@ def reset_box(request, box_id):
     box.save()
     msg = 'Successfully reset appliance. New Code: %s' % new_wall.code
     messages.success(request, msg)
-    return HttpResponseRedirect('/master/')
+    return HttpResponseRedirect('/host/')
 
 
 def restore_box(request, box_id):
@@ -85,7 +85,7 @@ def restore_box(request, box_id):
 
     msg = 'Restore appliance -- not yet implemented'
     messages.success(request, msg)
-    return HttpResponseRedirect('/box/')
+    return HttpResponseRedirect('/host/')
 
 
 def thank_you(request):
