@@ -95,6 +95,10 @@ def detail(request, box_id):
 
 
 def wikiwall(request, box_id):
+    """
+    The default view for any web client user (i.e. not the Host device
+    or the Receiver device. This view is for laptop/tablet/etc.
+    """
     if 'auth' not in request.session:
         messages.warning(request, 'Error: Not Authorized')
         return HttpResponseRedirect('/join/')
@@ -108,7 +112,8 @@ def wikiwall(request, box_id):
                                   context_instance=RequestContext(request))
 
 
-def wikiwallm(request, box_id):
+#def wikiwallm(request, box_id):
+def host_wall(request, box_id):
     if 'auth' not in request.session:
         messages.warning(request, 'Error: Not Authorized')
         return HttpResponseRedirect('/join/')
@@ -118,11 +123,11 @@ def wikiwallm(request, box_id):
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, }
-        return render_to_response('walls/master-wall.html', data, 
+        return render_to_response('walls/host-wall.html', data, 
                                   context_instance=RequestContext(request))
 
 
-def wikiwalls(request, box_id):
+def receiver_wall(request, box_id):
     if 'auth' not in request.session:
         messages.warning(request, 'Error: Not Authorized')
         return HttpResponseRedirect('/join/')
@@ -132,7 +137,7 @@ def wikiwalls(request, box_id):
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, }
-        return render_to_response('walls/slave-device.jade', data, 
+        return render_to_response('walls/receiver-wall.html', data, 
                                   context_instance=RequestContext(request))
 
 
@@ -196,7 +201,7 @@ def auth_box(request):
     messages.error(request, 'Access to url /box/ Unauthorized')
     return HttpResponseRedirect('/')
 
-def master(request):
+def auth_host(request):
     user_agent = request.META['HTTP_USER_AGENT']
     data = {'title': 'Kolabria - Valid Appliance ',}
     if user_agent[:3] == 'WWA' or 'wwa':
@@ -207,7 +212,7 @@ def master(request):
             wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
             request.session['wid'] = wid
-            return HttpResponseRedirect('/wikiwallm/%s' % box.box_id)
+            return HttpResponseRedirect('/host/wikiwall/%s' % box.box_id)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)
             return HttpResponseRedirect('/')
@@ -215,7 +220,7 @@ def master(request):
     return HttpResponseRedirect('/')
 
 
-def slave(request):
+def auth_receiver(request):
     user_agent = request.META['HTTP_USER_AGENT']
     data = {'title': 'Kolabria - Valid Appliance ',}
     if user_agent[:3] == 'WWA' or 'wwa':
@@ -226,14 +231,12 @@ def slave(request):
             wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
             request.session['wid'] = wid
-            return HttpResponseRedirect('/wikiwalls/%s' % box.box_id)
+            return HttpResponseRedirect('/receiver/wikiwall/%s' % box.box_id)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)
             return HttpResponseRedirect('/')
     messages.error(request, 'Access to url /box/ Unauthorized')
     return HttpResponseRedirect('/')
-
-
 
 
 def the_box(request, bid):
