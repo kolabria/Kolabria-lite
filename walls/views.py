@@ -16,16 +16,6 @@ from walls.models import Wall
 from appliance.models import Box
 
 
-# Legend of urls and views
-#create            url(r'^walls/create/$', views.create_wall),
-#view              url(r'^walls/share/(?P<wid>\w+)/$', views.share_wall),
-#update_sharing    #
-#share             url(r'^walls/unpublish/(?P<wid>\w+)/$', views.unshare_wall),
-#unshare           url(r'^walls/unshare/(?P<wid>\w+)/$', views.unshare_wall),
-#update            url(r'^walls/update/(?P<wid>\w+)/$', views.update_wall),
-#delete_wall       url(r'^walls/delete/(?P<wid>\w+)/$', views.delete_wall),
-
-
 def view(request, wid):
     # Get a specific wall by Mongo object id
     wall = Wall.objects.get(id=wid)
@@ -36,6 +26,7 @@ def view(request, wid):
             'box': box, }
     return render_to_response('walls/newwall.html', data, 
                               context_instance=RequestContext(request))
+
 
 def view_master_box(request, wid):
     # Appliance view for initiating appliance, sharing wall with slave
@@ -63,7 +54,7 @@ def view_slave_box(request, wid):
 
 def reset_box(request, box_id):
     """
-    To be called from initiating Device.
+    To be called from Host Device.
     Flushes the currently active wall.
     Generates a new wall with a new wall.code
     """
@@ -83,6 +74,10 @@ def reset_box(request, box_id):
 
 
 def restore_box(request, box_id):
+    """
+    To be called from Receiver Device.
+    Restores Receiver Device to default (own) active wall.
+    """
     box = Box.objects.get(box_id=box_id)
     wid = box.active_wall
     wall = Wall.objects.get(id=wid)
@@ -94,6 +89,11 @@ def restore_box(request, box_id):
 
 
 def thank_you(request):
+    """
+    Called on completed session from Client View.
+    Terminates client's session without terminating other sessions.
+    Returns /thank-you view with Feedback form.
+    """
     data = {'title': 'Kolabria - Session Complete - Feedback Form',
            }
     return render_to_response('walls/thank-you.html', data,
