@@ -70,8 +70,6 @@ def detail(request, box_id):
             if shared_box.box_id not in box.sharing:
                 box.sharing.append(str(shared_box.box_id))
                 box.save()
-#            if shared_box.box_id not in box.sharing:
-                # and shared_box.box_id != box_id
         except:
             pass
 
@@ -80,12 +78,8 @@ def detail(request, box_id):
             if shared_box.box_id not in box.sharing:
                 box.sharing.append(str(shared_box.box_id))
                 box.save()
-#                messages.success(request, 'Successfully added device: %s to QuickShare' % \
-#                                                                          shared_box.box_name)
         except:
             pass
-#            msg = 'Error: Device not found matching %s' % data
-#            messages.error(request, msg)
         return HttpResponseRedirect('/devices/edit/%s' % box_id)
 
     sharing = [ Box.objects.get(box_id=boxid) for boxid in box.sharing ]
@@ -110,7 +104,6 @@ def wikiwall(request, box_id):
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, }
-#        return render_to_response('walls/newwall.html', data, 
         return render_to_response('walls/client-wall.html', data, 
                                   context_instance=RequestContext(request))
 
@@ -165,10 +158,6 @@ def unshare_box(request, box_id, shared_id):
     box.sharing.remove(shared_id)
     box.save()
     shared_box = Box.objects.get(box_id=shared_id)
-#    msg = 'Successfully removed appliance: %s %s %s' % (shared_box.id,
-#                                                        shared_box.box_id,
-#                                                        shared_box.box_name)
-#    messages.success(request, msg)
     return HttpResponseRedirect('/devices/edit/%s/' % box.box_id)
 
 
@@ -200,10 +189,7 @@ def auth_box(request):
             wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
             request.session['wid'] = wid
-#            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
-#            messages.success(request, msg)
             return HttpResponseRedirect('/wikiwall/%s' % box.box_id)
-#            return HttpResponseRedirect('/walls/%s/' % wid)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)
             return HttpResponseRedirect('/')
@@ -221,8 +207,6 @@ def master(request):
             wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
             request.session['wid'] = wid
-#            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
-#            messages.success(request, msg)
             return HttpResponseRedirect('/wikiwallm/%s' % box.box_id)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)
@@ -242,10 +226,7 @@ def slave(request):
             wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
             request.session['wid'] = wid
-#            msg = "Recognized Appliance: %s id=%s" % (box.box_name, box_id)
-#            messages.success(request, msg)
             return HttpResponseRedirect('/wikiwalls/%s' % box.box_id)
-#            return HttpResponseRedirect('/walls/%s/' % wid)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)
             return HttpResponseRedirect('/')
