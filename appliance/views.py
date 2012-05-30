@@ -107,7 +107,8 @@ def wikiwall(request, box_id):
         box = Box.objects.get(box_id=box_id)
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
-                'box': box, }
+                'box': box, 
+                'sharing': box.sharing, }
         return render_to_response('walls/client-wall.html', data, 
                                   context_instance=RequestContext(request))
 
@@ -121,7 +122,8 @@ def host_wall(request, box_id):
         box = Box.objects.get(box_id=box_id)
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
-                'box': box, }
+                'box': box, 
+                'sharing': box.sharing, }
         return render_to_response('walls/host-wall.html', data, 
                                   context_instance=RequestContext(request))
 
@@ -135,7 +137,8 @@ def receiver_wall(request, box_id):
         box = Box.objects.get(box_id=box_id)
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
-                'box': box, }
+                'box': box, 
+                'sharing': box.sharing, }
         return render_to_response('walls/receiver-wall.html', data, 
                                   context_instance=RequestContext(request))
 
