@@ -104,11 +104,13 @@ def wikiwall(request, box_id):
         return HttpResponseRedirect('/join/')
     else:
         wall = Wall.objects.get(id=request.session['wid'])
+        client = request.session['name']
         box = Box.objects.get(box_id=box_id)
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, 
-                'sharing': box.sharing, }
+                'sharing': box.sharing,
+                'client': client, }
         return render_to_response('walls/client-wall.html', data, 
                                   context_instance=RequestContext(request))
 
