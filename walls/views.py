@@ -15,6 +15,7 @@ from walls.forms import PubWallForm, UnpubWallForm
 from walls.models import Wall
 from appliance.models import Box
 
+import ipdb
 
 def view(request, wid):
     # Get a specific wall by Mongo object id
@@ -94,6 +95,7 @@ def thank_you(request):
     Terminates client's session without terminating other sessions.
     Returns /thank-you view with Feedback form.
     """
+
     data = {'title': 'Kolabria - Session Complete - Feedback Form',
            }
     return render_to_response('walls/thank-you.html', data,

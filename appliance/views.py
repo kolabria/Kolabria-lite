@@ -112,7 +112,6 @@ def wikiwall(request, box_id):
                                   context_instance=RequestContext(request))
 
 
-#def wikiwallm(request, box_id):
 def host_wall(request, box_id):
     if 'auth' not in request.session:
         messages.warning(request, 'Error: Not Authorized')

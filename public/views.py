@@ -11,7 +11,6 @@ from account.forms import NewAccountForm, JoinMeetingForm
 from appliance.models import Box
 from walls.models import Wall
 
-import ipdb
 
 def public(request):
     if request.user.is_authenticated():
@@ -35,6 +34,7 @@ def join(request):
            box = Box.objects.get(box_name__iexact=room)
            wall = Wall.objects.get(id=box.active_wall)
            if wall.code == int(code):
+               ipdb.set_trace()
                request.session['wid'] = str(wall.id)
                request.session['auth'] = True
                messages.success(request, '%s %s %s' % (name, room, code))
@@ -42,7 +42,6 @@ def join(request):
                                                        request.session['auth'],
                                                        request.session))
                return HttpResponseRedirect('/wikiwall/%s' % box.box_id)
-#               return HttpResponseRedirect('/walls/%s' % str(wall.id))
            else:
                messages.error(request, 'Error: Invalid Code. Please try again.')
                pass
