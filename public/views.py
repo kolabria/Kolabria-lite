@@ -34,7 +34,6 @@ def join(request):
            box = Box.objects.get(box_name__iexact=room)
            wall = Wall.objects.get(id=box.active_wall)
            if wall.code == int(code):
-               ipdb.set_trace()
                request.session['wid'] = str(wall.id)
                request.session['auth'] = True
                messages.success(request, '%s %s %s' % (name, room, code))
