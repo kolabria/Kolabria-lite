@@ -44,11 +44,15 @@
     <canvas id="myCanvas" resize></canvas>
   </div>
   <div class="navWindow">
- <div view></div>
+  <div view></div>
   </div>
+
   <div class="shareTo">
-    <h2>{{ wall.code }}</h2>
+    {% for bid in sharing %}
+    <h2>{{ bid }}</h2>
+    {% endfor %}
   </div>
+
 {% endblock content %}
 
 {% block js %}

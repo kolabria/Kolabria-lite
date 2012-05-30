@@ -47,14 +47,15 @@
  <div view></div>
   </div>
   <div class="shareTo">
-    <h2>{{ wall.code }}</h2>
+    {% for bid in sharing %}
+    <h2>{{ bid }}</h2>
+    {% endfor %}
   </div>
 {% endblock content %}
 
 {% block js %}
     <script>
       var wallId = '{{ wall.id }}';
-      var wallsArray = [ {% for wall in walls %} "{{ wall.id }}", {% endfor %} ]
       var companyId = '{{ wall.company.id }}'; //from application 
       var boxID = '{{ box.box_id }}'; //from application 
       var box_name = '{{ box.box_name }}'; //from application 
