@@ -22,9 +22,11 @@ def view(request, wid):
     wall = Wall.objects.get(id=wid)
     box_id = wall.box_id
     box = Box.objects.get(box_id=box_id)
+    client = request.session['name']
     data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
             'wall': wall,
-            'box': box, }
+            'box': box, 
+            'client' client, }
     return render_to_response('walls/newwall.html', data, 
                               context_instance=RequestContext(request))
 

@@ -43,14 +43,14 @@
   <div class="whiteboard">
     <canvas id="myCanvas" resize></canvas>
   </div>
-  <div class="navWindow">
-  <div view></div>
+  <div id="navWindow">
+    <div view></div>
   </div>
 
-  <div class="shareTo">
-    {% for bid in sharing %}
-    <h2>{{ bid }}</h2>
-    {% endfor %}
+   <div id="users">
+    <ul>
+      <li>{{ client }}</li>
+    </ul>
   </div>
 
 {% endblock content %}
