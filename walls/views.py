@@ -26,7 +26,7 @@ def view(request, wid):
     data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
             'wall': wall,
             'box': box, 
-            'client' client, }
+            'client': client, }
     return render_to_response('walls/newwall.html', data, 
                               context_instance=RequestContext(request))
 
