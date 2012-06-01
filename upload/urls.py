@@ -1,17 +1,10 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import include, patterns, url
+from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+#from upload import views
 
 urlpatterns = patterns('',
-    # Example:
-    (r'^upload/$', "upload.views.upload_file" ),
-    (r'^uploaded/$', "upload.views.uploaded" ),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # (r'^admin/', include(admin.site.urls)),
+    url(r'^upload/$', 'upload.views.upload_file'),
+    url(r'^uploaded/$', 'upload.views.uploaded'),
 )
