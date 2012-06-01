@@ -8,7 +8,6 @@ import settings
 from forms import UploadFileForm
 from models import Upload
 
-import ipdb
 
 def _upload(fl):
     '''Handle the actual file upload.'''
@@ -24,7 +23,6 @@ def _upload(fl):
 
 
 def upload_file(request):
-    ipdb.set_trace()
     obj = Upload()
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)

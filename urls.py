@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     (r'', include('login.urls')), # /login/ /logout/ /register/
     (r'', include('appliance.urls')), # /devices/ 
     (r'', include('walls.urls')), # /wall/
-    (r'^blog', include('apps.blog.urls')), # mongoforms example
+    (r'', include('upload.urls')), # /upload/
 )
 
 if settings.DEBUG:
