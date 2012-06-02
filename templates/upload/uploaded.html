@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container-fluid well span8">
+      <div class="row-fluid">
+        {% if messages %}
+        <div class="span6 ">
+          <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+          {% for message in messages %}
+           <p>{{ message }}</p>
+          {% endfor %}
+          </div><!-- alert-block -->
+        </div><!--/span6 -->
+       </div><!--/row -->
+        {% endif %}
+
+        <div class="row-fluid span8">
+         <div class="span10 ">
+           <h1>Kolabria - File Upload Test</h1>
+           <br />
+           <h3>File upload success!!</h3>
+         </div>
+      </div> 
+    {% endblock %}
+
+
