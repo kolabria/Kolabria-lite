@@ -9,7 +9,7 @@ import ipdb
 
 def handle_uploaded_file(file_obj, file_name):
     ipdb.set_trace()
-    destination = open(file_name, 'wb+')
+    destination = open('/media/' + file_name, 'wb+')
     for chunk in file_obj.chunks():
         destination.write(chunk)
     destination.close()
@@ -31,6 +31,6 @@ def upload_file(request):
 
 def uploaded(request):
     data = {'title': 'Kolabria - Upload Success!!'}
-    
+
     return render_to_response('upload/uploaded.html', data,
                               context_instance=RequestContext(request))
