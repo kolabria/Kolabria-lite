@@ -49,8 +49,11 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'testkolabria@gmail.com'
 EMAIL_HOST_PASSWORD = 'test_kolabria'
 EMAIL_PORT = 587
-INTERNAL_IPS = ('127.0.0.1',)
+
+FILE_UPLOAD_PERMISSIONS = 0644
 FROM_EMAIL = EMAIL_HOST_USER
+
+INTERNAL_IPS = ('127.0.0.1',)
 
 LOGIN_REDIRECT_URL = '/devices/'
 LOGIN_URL = '/login/'
