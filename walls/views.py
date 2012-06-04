@@ -37,7 +37,8 @@ def view_master_box(request, wid):
     box = Box.objects.get(box_id=box_id)
     data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
             'wall': wall,
-            'box': box, }
+            'box': box,
+            'client': box.box_name, }
     return render_to_response('walls/master-wall.html', data, 
                               context_instance=RequestContext(request))
 
@@ -48,7 +49,8 @@ def view_slave_box(request, wid):
     box = Box.objects.get(box_id=box_id)
     data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
             'wall': wall,
-            'box': box, }
+            'box': box, 
+            'client': box.box_name, }
     return render_to_response('walls/slave-wall.html', data, 
                               context_instance=RequestContext(request))
 
