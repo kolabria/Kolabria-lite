@@ -15,7 +15,6 @@ from walls.forms import PubWallForm, UnpubWallForm
 from walls.models import Wall
 from appliance.models import Box
 
-import ipdb
 
 def view(request, wid):
     # Get a specific wall by Mongo object id
