@@ -1,11 +1,37 @@
 now.ready(function(){
+  now.wallId = wallId;
+  now.name = name;
+  now.companyId = companyId;
+  if(typeof boxID != 'undefined'){
+    now.boxID = boxID
+    now.register(function(shared,shares){
+      if(shared){
+        for(i = 0; i < shared.length; i++){
+          jQuery('#shareTo').find('[data-value='+shared[i]+']').children('i').addClass('icon-ok');
+        }
+      }
+      if(shares){
+        for(i = 0; i < shares.length; i++){
+          jQuery('#walls').find('ul').append('<li class="'+shares[i].id+'"><a href="/connect/'+shares[i].id+'">'+shares[i].name+'</a></li>');
+        }
+      }
+
+    //loop through shares
+    //change style of shared
+    });
+  }
   var color = 'black';
   var width = 2;
-  
+
+  var worker = new Worker('/javascripts/worker.js');
+  worker.addEventListener('message', function(e){
+    pen.path.add(e.data);
+    now.shareUpdateDraw(e.data,paper.project.activeLayer.index);
+  }, false);
   //helper functions
   var serializePath = function(path){
     var segs = new Array();
-    x = pen.path.segments;
+    x = path
     for(y in x){
       var z = {
         point:{}
@@ -23,31 +49,71 @@ now.ready(function(){
     return segs
   }
 
-
   //NOW functions
   //populate the canvas
-  now.initWall(companyId, wallId, function(d){
+  now.initWall(function(d, users){
     //convert database info into paperjs object
     //go through all elements and rebuild
-    for(x in d.paths){
-      var p = d.paths[x];
-      if(!paper.project.layers[p.layer]){
-        new Layer();
+    if(d){
+      for(x in d.paths){
+        var p = d.paths[x];
+        if(!paper.project.layers[p.layer]){
+          new Layer();
+        }
+        paper.project.layers[p.layer].activate();
+        points = new Array();
+        for (n in p.description){
+          points.push(JSON.parse(p.description[n]));
+        }
+        var path = new Path(points);
+        path.strokeColor = p.color;
+        path.strokeWidth = p.width;
+        path.opacity = p.opacity;
+        path.name = p._id;
       }
-      paper.project.layers[p.layer].activate();
-      points = new Array();
-      for (n in p.description){
-        points.push(JSON.parse(p.description[n]));
-      }
-      var path = new Path(points);
-      path.strokeColor = p.color;
-      path.strokeWidth = p.width;
-      path.opacity = p.opacity;
-      path.name = p._id;
+    }
+    for(i = 0; i < users.length;i++){
+      jQuery('#users').find('ul').append('<li class="'+users[i].id+'">'+users[i].name+'</li>');
     }
     paper.view.draw();//refresh canvas
   });
-  
+
+  now.pushUser = function(username, clientId){
+    jQuery('#users').find('ul').append('<li class="'+clientId+'">'+username+'</li>');
+    gAlert(username+' has joined')
+  }
+  now.pullUser = function(username, clientId){
+    users = jQuery('#users').find('.'+clientId);
+    if (users.length){
+      jQuery(users).detach()
+      gAlert(username + 'Has Left the chat');
+    }
+  }
+  now.quit = function(){
+    window.location = jQuery('#toolbar').find('.quit').attr('href');
+  }
+  now.share = function(host, name){
+    jQuery('#walls').find('ul').append('<li class="'+host+'"><a href="/connect/'+host+'">'+name+'</a></li>');
+    //add this share to the list of shares.
+    gAlert(name + ' Has shared a wall with you');
+  }
+  now.unshare = function(host){
+    //find box in shares with that id and remove it.
+    console.log(host)
+    jQuery('#walls').find('.'+host).detach();
+  }
+  now.sharedTo = function(box){
+    jQuery('#shareTo').find('[value='+k+']').addClass('active');
+  }
+
+  gAlert = function(message){
+    jQuery('<div class="alert fade in">'+message+'</div>')
+      .appendTo('#alerts')
+      .delay(1000).slideUp(300, function(){
+        this.detach();
+      })
+  }
+
   //Start of drawing
   now.startDraw = function(color,width,start,pathname,layer){
     if(!paper.project.layers[layer]){
@@ -63,7 +129,6 @@ now.ready(function(){
   
   now.updateDraw = function(point,pathname,layer){
     paper.project.layers[layer].children[pathname].add(point);
-    paper.view.draw(); //refresh canvas
   }
 
   now.endDraw = function(layer,pathname,newname){
@@ -74,16 +139,19 @@ now.ready(function(){
   
   //move an object
   now.updateMove = function(layer,pathname,delta){
-     paper.project.layers[layer].children[pathname].position.x += delta.x;
-     paper.project.layers[layer].children[pathname].position.y += delta.y;
-     paper.view.draw(); //refresh canvas
+    paper.project.layers[layer].children[pathname].position.x += delta.x;
+    paper.project.layers[layer].children[pathname].position.y += delta.y;
+    paper.view.draw(); //refresh canvas
   }
-
+  now.removePath = function(layer,pathname){
+    paper.project.layers[layer].children[pathname].remove();
+    paper.view.draw();
+  }
   now.tError = function(err){
     alert(err);
   }
   //Tool Definitions
-
+  tool.distanceThreshhold = 10;
   //Pen Tool
   var pen = new Tool();
   pen.onMouseDown = function(event){
@@ -91,19 +159,18 @@ now.ready(function(){
     pen.path.strokeColor = color;
     pen.path.strokeWidth = 2;
     pen.path.add(event.point);
-    now.shareStartDraw(companyId,wallId,color,width,event.point,paper.project.activeLayer.index);
+    now.shareStartDraw(color,width,event.point,paper.project.activeLayer.index);
   }
   pen.onMouseUp = function(event){
     pen.path.simplify(10);
     x = pen.path.segments;
     var segs = serializePath(x);
-    now.newPath(companyId,wallId,segs,color,pen.path.strokeWidth,paper.project.activeLayer.index,function(name){
+    now.newPath(segs,color,pen.path.strokeWidth,paper.project.activeLayer.index,function(name){
       pen.path.name = name;
     });
   }
   pen.onMouseDrag = function(event){
-    pen.path.add(event.point);
-    now.shareUpdateDraw(companyId,wallId,event.point,paper.project.activeLayer.index);
+    worker.postMessage(event.point);
   }
 
   //Pan Tool
@@ -121,59 +188,230 @@ now.ready(function(){
 
   //Select Tool
   var select = new Tool();
-  
   select.onMouseDown = function(event){
-    select.target = project.hitTest(event.point, {stroke:true,segments:true})
+    if(select.target){
+      select.target.item.selected = false
+      jQuery('.delete-object').remove();
+    }
+    select.target = project.hitTest(event.point, {stroke:true,segments:true,tolerance:2});
+    if(select.target){
+      var windowPosX = select.target.item.bounds.topLeft.x-paper.view.bounds.topLeft.x+select.target.item.bounds.width
+      var windowPosY = select.target.item.bounds.topLeft.y-paper.view.bounds.topLeft.y
+      select.target.item.selected = true;
+      jQuery('canvas').after('<i onClick="" class="delete-object icon-remove" style="left:'+windowPosX+'px;top:'+windowPosY+'px;"></i>');
+    }
   }
   select.onMouseDrag = function(event){
     if(select.target){
       select.target.item.position.x += event.delta.x;
       select.target.item.position.y += event.delta.y;
-      now.sendMoveItem(companyId,wallId,paper.project.activeLayer.index,select.target.item.name,event.delta);
+      now.sendMoveItem(paper.project.activeLayer.index,select.target.item.name,event.delta);
       paper.view.draw(); //refresh canvas
+      var windowPosX = select.target.item.bounds.topLeft.x-paper.view.bounds.topLeft.x+select.target.item.bounds.width
+      var windowPosY = select.target.item.bounds.topLeft.y-paper.view.bounds.topLeft.y
+      jQuery('i').css({left:windowPosX,top:windowPosY})
     }
   }
   select.onMouseUp = function(event){
-    x = select.target.item.segments;
-    var segs = serializePath(x);
-    now.updatePath(companyId,wallId,select.target.item.name,segs);
+    if(select.target){
+      x = select.target.item.segments;
+      var segs = serializePath(x);
+      now.updatePath(select.target.item.name,segs);
+    }
   }
 
   //Event listeners
-  //Improve Center - currently centers on activeLayer, better would take average x of all points, and average y of all points, scroll to that point
-  //How to get all points?
-
-  //Change color;
-  jQuery('.color').click(function(){
-    color = $(this).val();
-  });
-  //Change tool
-  jQuery('.tool').click(function(){
-    var t = $(this).val();
-    c = jQuery('#myCanvas').removeClass();
-    switch(t){
-      case 'Pan':
-        c.addClass('move');
-        pan.activate();
+  //keymap
+  jQuery(document).keydown(function(event){
+    switch (event.which) {
+      case 80:
+        //p for pen?
+        jQuery('.tool[value=Pen]').click();
         break;
-      case 'Pen':
-        c.addClass('crosshair');
-        pen.activate();
+      case 46:
+        //delete for delete?
+        jQuery('.delete-object').click();
         break;
-      case 'Select':
-        c.addClass('pointer');
-        select.activate();
+      case 67:
+        //c for center?
+        jQuery('.tool[value=Center]').click();
+        console.log('center');
         break;
-      case 'Center':
-        var l = paper.project.activeLayer.bounds.center;
-        var v = paper.view.center;
-        var p = new Point(l.x - v.x,l.y - v.y);
-        view.scrollBy(p);
-        view.draw(); 
+      case 83:
+        //s for select?
+        jQuery('.tool[value=Select]').click();
+        break;
+      case 37: //left
+        paper.view.scrollBy({x:-10,y:0});
+        paper.view.draw();
+        break;
+      case 38: //up
+        paper.view.scrollBy({x:0,y:-10});
+        paper.view.draw();
+        break;
+      case 39: //right
+        paper.view.scrollBy({x:10,y:0});
+        paper.view.draw();
+        break;
+      case 40: //down
+        paper.view.scrollBy({x:0,y:10});
+        paper.view.draw();
         break;
     }
   });
+
+  scrollNav = function(){
+    c.addClass('nav');
+    nw.show();
+    var windowTop = paper.view.bounds.top;
+    var windowRight = paper.view.bounds.right;
+    var windowBottom = paper.view.bounds.bottom;
+    var windowLeft = paper.view.bounds.left;
+    var paperTop = paper.project.activeLayer.bounds.top;
+    var paperRight = paper.project.activeLayer.bounds.right;
+    var paperBottom = paper.project.activeLayer.bounds.bottom;
+    var paperLeft = paper.project.activeLayer.bounds.left;
+    var navTop = Math.min(windowTop,paperTop);
+    var navRight = Math.max(windowRight, paperRight);
+    var navBottom = Math.max(windowBottom, paperBottom);
+    var navLeft = Math.min(windowLeft, paperLeft);
+    var windowLength = paper.view.bounds.width;
+    var windowHeight = paper.view.bounds.height;
+    var navLength = navRight - navLeft
+    var navHeight = navBottom - navTop
+    var rLength = navLength / 200;
+    var rHeight = navHeight / 150;           
+    var canvas
+              
+    var originalPosition = {
+      top  : false,
+      left : false
+    }
+
+    jQuery('#view')
+      .width(windowLength / rLength)
+      .height(windowHeight / rHeight)
+      .css({
+        top : (windowTop-navTop)/rHeight,
+        left : (windowLeft-navLeft)/rLength
+      })
+      .draggable({
+        containment:"parent",
+        drag: function(event, ui){
+          if(originalPosition.left === false && originalPosition.top === false){
+            originalPosition.left = ui.originalPosition.left
+            originalPosition.top = ui.originalPosition.top
+          }
+          offsetLeft = ui.position.left - originalPosition .left
+          offsetTop = ui.position.top - originalPosition.top
+          originalPosition.left = ui.position.left 
+          originalPosition.top = ui.position.top  
+          pan.v = new Point()
+          pan.v.x = offsetLeft * rLength * paper.view.zoom;
+          pan.v.y = offsetTop * rHeight * paper.view.zoom;
+          paper.view.scrollBy(pan.v)
+          paper.view.draw();
+        },
+        stop: function(event, ui){
+          originalPosition.left = false;
+          originalPosition.top = false;
+        }
+      });
+  }
+  //delete
+  jQuery(document).on('click','.delete-object',function(){ 
+    if(select.target.item.remove()){
+      jQuery('i').filter('.delete-object').remove();
+      paper.view.draw();
+    }
+    now.sendDeleteItem(paper.project.activeLayer.index,select.target.item.name);
+  });
+  jQuery('#shareTo li').click(function(e){
+    e.stopImmediatePropagation(); //Two clicks are fired, this is a patch, need to find reason why.
+    var li = jQuery(this);
+    cl = li.attr('data-value');
+    if(li.find('.icon-ok').length < 1){
+      now.shareWall(cl);
+      li.find('i').addClass('icon-ok')
+    }
+  })
+  //Change tool or color
+  jQuery('#toolbar').add('#navWindow').click(function(e){
+    var obj = jQuery(e.target);
+    var t = obj.attr('value');
+    var cl = obj.attr('class');
+    c = jQuery('#myCanvas').removeClass();
+    if(e.currentTarget.id != 'navWindow'){
+      nw = jQuery('#navWindow').hide();
+    }
+    if(/.*tool.*/.test(cl)){
+      switch(t){
+        case 'Nav':
+          scrollNav();       
+          break;
+        case 'ZoomOut':
+          scrollNav();
+          paper.view.zoom = paper.view.zoom /2
+          break;
+        case 'ZoomIn':
+          scrollNav();
+          paper.view.zoom = paper.view.zoom * 2
+          break;
+        case 'Pen':
+          c.addClass('crosshair');
+          pen.activate();
+          break;
+        case 'Select':
+          c.addClass('pointer');
+          select.activate();
+          break;
+        case 'Center':
+          scrollNav();
+          var l = paper.project.activeLayer.bounds.center;
+          var v = paper.view.center;
+          var p = new Point(l.x - v.x,l.y - v.y);
+          view.scrollBy(p);
+          view.draw(); 
+          break;
+      }
+    }else if(/.*color.*/.test(cl)){
+      color = t
+      jQuery('.tool[value=Pen]').click();
+    }else if(/.*share.*/.test(cl)){
+      switch(t){
+        case 'Share':
+          jQuery('#shareTo').modal({});
+          break;
+        case 'Shared':
+          jQuery('#walls').modal({});
+          break;
+        case 'Users':
+          jQuery('#users').modal({});
+          break;
+      }
+    }else{
+      if(/.*clear.*/.test(cl)){
+        now.clear(function(){
+          return true;
+        });
+      }
+    }
+  });
   jQuery('.tool[value=Pen]').click();
+  iOS_disableZooming();
+  iOS_disableScrolling();
+  window.onorientationchange = function(){
+      if ( orientation == 0 ) {
+        window.scrollTo(0,1);
+      }  
+      else if ( orientation == 90 ) {  
+      }  
+      else if ( orientation == -90 ) {  
+      }  
+      else if ( orientation == 180 ) {  
+        window.scrollTo(0,1); 
+      }  
+   }
 });
 
-
+  
