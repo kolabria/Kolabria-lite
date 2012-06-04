@@ -1,59 +1,86 @@
 {% extends "base.html" %}
 
-{% block title %} Kolabria Wikiwall - Master | {{ wall.name }} {% endblock title %}
 
 {% block styles %}
     <link rel="stylesheet" href="http://points.kolabria.com/stylesheets/wall.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}assets/css/bootstrap.css">
-    <link rel="stylesheet" href="http://points.kolabria.com/stylesheets/wall.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css">
 
     <script src="http://points.kolabria.com/javascripts/paper.js"></script>
     <script src="http://points.kolabria.com/javascripts/ios.js "></script>
+    <script src="http://points.kolabria.com/javascripts/touch-punch.min.js"></script>
+    
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
-    <script src="http://points.kolabria.com/javascripts/touch-punch.min.js"></script>
-    <script src="http://points.kolabria.com/javascripts/worker.js"></script>
     <script src="http://points.kolabria.com/nowjs/now.js"></script><!--this is what allows realtime communication -->
 {% endblock styles %}
 
 {% block navbar %}
-	<header>
-    <nav id="toolbar" class="toolbar">
-  		<ul class="navigation">
-        <li><input type="button" value="Pen" class="tool"></li>
-        <li><input type="button" value="Black" class="color"></li>
-        <li><input type="button" value="Red" class="color"></li>
-        <li><input type="button" value="Green" class="color"></li>   | 
-        <li><a href="http://localhost:3000/settings" class="settings">Settings</a></li>  |  
-        <li><a href="/walls/reset/{{ wall.box_id }}" class="quit">quit</a></li>
-      </ul>
-      <ul>
-        <li><input type="button" value="Nav" class="tool"></li>
-        <li><input type="button" value="ZoomIn" class="tool"></li>
-        <li><input type="button" value="Center" class="tool"></li>
-        <li><input type="button" value="ZoomOut" class="tool"></li> | 
-        <li><input type="button" value="Select" class="tool"></li>
-        <li><input type="button" value="Share" class="share"></li>
-        <li><input type="button" value="Shared" class="share"></li>
-        <li><input type="button" value="Users" class="share"></li>
-      </ul>
+ <header><nav id="toolbar" class="toolbar">
+    <ul class="navigation">
+        <li><button type="button" onclick="" value="Pen" class="btn tool"><i class="icon-pencil"></i></button>
+        <ul>
+            <li><button type="button" onclick="" value="Black" class="btn btn-inverse color"></button></li>
+            <li><button type="button" onclick="" value="Red" class="btn btn-danger color"></button></li>
+            <li><button type="button" onclick="" value="Green" class="btn btn-success color"></button></li>
+            <li><button type="button" onclick="" value="Blue" class="btn btn-primary color"></button></li>
+        </ul>
+        </li>
+        <li><button type="button" onclick="" value="Nav" class="btn tool"><i class="icon-move"></i></button></li>
+        <li><button type="button" onclick="" value="Select" class="btn tool"><i class="icon-hand-up"></i></button></li>
+        <li><button type="button" onclick="" value="Share" class="btn share"><i class="icon-share"></i></button></li>
+        <li><button type="button" onclick="" value="Shared" class="btn share"><i class="icon-inbox"></i></button></li>
+        <li><button type="button" onclick="" value="Users" class="btn share"><i class="icon-user"></i></button></li>
+        <li><a href="http://localhost:3000/settings" class="settings btn"><i class="icon-cog"></i></a></li>
+        <li><a href="/walls/reset/{{ wall.box_id }}" class="clear btn"><i class="icon-trash"></i></a></li>
+    </ul>
     </nav>
-      <h1>box_id: {{ wall.box_id }} | Room: {{ box.box_name }} |  code: {{ wall.code }}</h1>
-	</header>
+    <h1>{Wall Name} //from application</h1>
+    </header>
 {% endblock navbar %}
 
 {% block content %}
-  <div class="whiteboard">
-    <canvas id="myCanvas" resize></canvas>
-  </div>
-  <div class="navWindow">
- <div view></div>
-  </div>
-  <div class="shareTo">
-    {% for bid in sharing %}
-    <h2>{{ bid }}</h2>
-    {% endfor %}
-  </div>
+    <div class="whiteboard">
+        <canvas id="myCanvas" resize></canvas>
+    </div>
+    <div id="navWindow">
+        <div id="view">
+        </div>
+        <div class="btn-group">
+            <button type="button" onclick="" value="ZoomIn" class="btn tool"><i class="icon-plus"></i></button><button type="button" onclick="" value="Center" class="btn tool"><i class="icon-asterisk"></i></button><button type="button" onclick="" value="ZoomOut" class="btn tool"><i class="icon-minus"></i></button>
+        </div>
+    </div>
+    <div id="shareTo" class="modal fade">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close">x</button>
+            <h3>Share Wall {Pin Number}</h3>
+        </div>
+        <div class="modal-body">
+            <ul>
+                {% for bid in sharing %}
+                <li data-value="{{ bid }}" class="btn"><span>{{ bid }}</span><i></i></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div id="walls" class="modal fade">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close">x</button>
+            <h3>Shared Walls</h3>
+        </div>
+        <div class="modal-body">
+            <ul></ul>
+        </div>
+    </div>
+    <div id="users" class="modal fade">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close">x</button>
+            <h3>Online Users</h3>
+        </div>
+        <div class="modal-body">
+            <ul></ul>
+        </div>
+    </div>
+    <div id="alerts"></div>
 {% endblock content %}
 
 {% block morejs %}
@@ -61,15 +88,7 @@
       var wallId = '{{ wall.id }}';
       var companyId = '{{ wall.company.id }}'; //from application 
       var boxID = '{{ box.box_id }}'; //from application 
-      var box_name = '{{ box.box_name }}'; //from application 
-      // Does Django need to store anything for permissions?
-      // or do we assume because it's on the approved share list that all is good.
-      // -- response: No we process each request and test for auth,
-      //              then store the auth token in the session cookie from the 
-      //              Django side
+      var name = '{{ box.box_name }}'; //from application 
     </script>
-
-    <script src="http://points.kolabria.com/js/wall.js" canvas="myCanvas" type="text/paperscript"></script>
     <script src="{{ STATIC_URL }}js/wall.js" canvas="myCanvas" type="text/paperscript"></script>
-    <script src="http://points.kolabria.com/javascripts/app.js" canvas="myCanvas" type="text/paperscript"></script>
 {% endblock morejs %}
