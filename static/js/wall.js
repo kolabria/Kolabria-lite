@@ -12,7 +12,7 @@ now.ready(function(){
       }
       if(shares){
         for(i = 0; i < shares.length; i++){
-          jQuery('#walls').find('ul').append('<li class="'+shares[i].id+'"><a href="/connect/'+shares[i].id+'">'+shares[i].name+'</a></li>');
+          jQuery('#walls').find('ul').append('<li class="'+shares[i].id+'"><a href="/receiver/wikiwall/'+shares[i].id+'">'+shares[i].name+'</a></li>');
         }
       }
     });
@@ -92,7 +92,7 @@ now.ready(function(){
     window.location = jQuery('#toolbar').find('.quit').attr('href');
   }
   now.share = function(host, name){
-    jQuery('#walls').find('ul').append('<li class="'+host+'"><a href="/connect/'+host+'">'+name+'</a></li>');
+    jQuery('#walls').find('ul').append('<li class="'+host+'"><a href="/receiver/wikiwall/'+host+'">'+name+'</a></li>');
     //add this share to the list of shares.
     gAlert(name + ' Has shared a wall with you');
   }
