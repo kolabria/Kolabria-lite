@@ -209,9 +209,12 @@ def auth_box(request):
 
 def auth_host(request):
     user_agent = request.META['HTTP_USER_AGENT']
+    valid_agent = user_agent.find('WWA')
     data = {'title': 'Kolabria - Valid Appliance ',}
-    if user_agent[:3] == 'WWA' or 'wwa':
-        box_id = user_agent
+    if valid_agent != '-1':
+#    if user_agent[:3] == 'WWA' or 'wwa':
+#        box_id = user_agent
+        box_id = user_agent[valid_agent:]
         try:
             box = Box.objects.get(box_id__iexact=box_id)
             wid = box.active_wall
@@ -228,9 +231,12 @@ def auth_host(request):
 
 def auth_receiver(request):
     user_agent = request.META['HTTP_USER_AGENT']
+    valid_agent = user_agent.find('WWA')
     data = {'title': 'Kolabria - Valid Appliance ',}
-    if user_agent[:3] == 'WWA' or 'wwa':
-        box_id = user_agent
+    if valid_agent != '-1':
+#    if user_agent[:3] == 'WWA' or 'wwa':
+        box_id = user_agent[valid_agent:]
+#        box_id = user_agent
         try:
             box = Box.objects.get(box_id__iexact=box_id)
             wid = box.active_wall
