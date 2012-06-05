@@ -104,8 +104,8 @@ def wikiwall(request, box_id):
         return HttpResponseRedirect('/join/')
     else:
         wall = Wall.objects.get(id=request.session['wid'])
-        client = request.session['name']
         box = Box.objects.get(box_id=box_id)
+        client = request.session['name'] or box.box_name
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, 
@@ -125,7 +125,8 @@ def host_wall(request, box_id):
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, 
-                'sharing': box.sharing, }
+                'sharing': box.sharing,
+                'client': box.box_name, }
         return render_to_response('walls/host-wall.html', data, 
                                   context_instance=RequestContext(request))
 
@@ -140,7 +141,8 @@ def receiver_wall(request, box_id):
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, 
-                'sharing': box.sharing, }
+                'sharing': box.sharing,
+                'client': box.box_name, }
         return render_to_response('walls/receiver-wall.html', data, 
                                   context_instance=RequestContext(request))
 
