@@ -14,10 +14,8 @@
     <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}images/apple-touch-icon-114x114.png">
 
     <title>{% block title %}Kolabria WikiWall - Real-time Collaborative Whiteboard{% endblock title %}</title>
-
     {% block styles %}
     <!-- Le styles -->
-    <script src="{{ STATIC_URL }}js/jquery.js" ></script>
     <link href="{{ STATIC_URL }}css/wall.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
@@ -54,7 +52,11 @@
         </div><!--span -->
       </div><!--row -->
       {% endcomment %}
-
+    
+    
+    
+    <script src="{{ STATIC_URL }}js/jquery-1.7.2.min.js" ></script>
+    <script src="http://points.kolabria.com/javascripts/ios.js "></script>
     {% block js %} 
     <!-- Le javascript
     ================================================== -->
@@ -71,7 +73,16 @@
     <script src="{{ STATIC_URL }}js/bootstrap-collapse.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>
-    {% endblock js %}
+    {% endblock js %}    
+    <script>
+      iOS_disableZooming();
+      iOS_disableScrolling();
+      window.onorientationchange = function(){
+        if ( orientation == 0 || orientation == 180) {
+          window.scrollTo(0,1);
+        }  
+      }
+    </script>
     {% block morejs %}{% endblock morejs %}
 
   </body>
