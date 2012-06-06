@@ -6,27 +6,53 @@
 {% endblock styles %}
 
 {% block navbar %}
- <header><nav id="toolbar" class="toolbar">
-    <ul class="navigation">
-        <li><button type="button" onclick="" value="Pen" class="btn tool"><i class="icon-pencil"></i></button>
-        <ul>
-            <li><button type="button" onclick="" value="Black" class="btn btn-inverse color"></button></li>
-            <li><button type="button" onclick="" value="Red" class="btn btn-danger color"></button></li>
-            <li><button type="button" onclick="" value="Green" class="btn btn-success color"></button></li>
-            <li><button type="button" onclick="" value="Blue" class="btn btn-primary color"></button></li>
+<header class="navbar navbar-fixed-bottom">
+    <nav id="toolbar" class="toolbar">
+        <ul class="nav pull-left">
+            <li class="btn-group dropup pen">
+                <button type="button" onclick="" value="Pen" class="btn tool"><i class="icon-pencil"></i></button>
+                <button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
+            	<ul class="dropdown-menu pull-right">
+            		<li><button type="button" onclick="" value="Black" class="btn btn-inverse color"></button></li>
+            		<li><button type="button" onclick="" value="Red" class="btn btn-danger color"></button></li>
+            		<li><button type="button" onclick="" value="Green" class="btn btn-success color"></button></li>
+            		<li><button type="button" onclick="" value="Blue" class="btn btn-primary color"></button></li>
+            	</ul>
+        	</li>
+        	<li><button type="button" onclick="" value="Nav" class="btn tool"><i class="icon-move"></i></button></li>
+        	<li><button type="button" onclick="" value="Select" class="btn tool"><i class="icon-hand-up"></i></button></li>
+        	<li id="shareTo" class="btn-group dropup"><button data-toggle="dropdown" class="btn dropdown-toggle"><i class="icon-share"></i><span class="caret"></span></button>
+            	<ul class="dropdown-menu">
+            		<li><h4>Share Wall {{ wall.code }}</h4></li>
+            		<li class="divider"></li>
+                    {% for bid in sharing %}
+                    <li data-value="{{ bid }}" class="btn"><span>{{ bid }}</span><i></i></li>
+                    {% endfor %}
+            	</ul>
+        	</li>
+        	<li id="walls" class="btn-group dropup"><button data-toggle="dropdown" class="btn dropdown-toggle"><i class="icon-inbox"></i><span class="caret"></span></button>
+            	<ul class="dropdown-menu">
+            		<li><h4>Shared Walls</h4></li>
+            		<li class="divider"></li>
+            	</ul>
+        	</li>
+        	<li id="users" class="btn-group dropup">
+                <button data-toggle="dropdown" class="btn dropdown-toggle"><i class="icon-user"></i><span class="caret"></span></button>
+            	<ul class="dropdown-menu">
+            		<li><h4>Active Users</h4></li>
+            		<li class="divider"></li>
+            	</ul>
+        	</li>
         </ul>
-        </li>
-        <li><button type="button" onclick="" value="Nav" class="btn tool"><i class="icon-move"></i></button></li>
-        <li><button type="button" onclick="" value="Select" class="btn tool"><i class="icon-hand-up"></i></button></li>
-        <li><button type="button" onclick="" value="Share" class="btn share"><i class="icon-share"></i></button></li>
-        <li><button type="button" onclick="" value="Shared" class="btn share"><i class="icon-inbox"></i></button></li>
-        <li><button type="button" onclick="" value="Users" class="btn share"><i class="icon-user"></i></button></li>
-        <li><a href="http://http://points.kolabria.com/settings" class="settings btn"><i class="icon-cog"></i></a></li>
-        <li><a href="/walls/reset/{{ box.box_id }}" class="clear btn"><i class="icon-trash"></i></a></li>
-    </ul>
     </nav>
-    <h1>{{ box.box_name }} | {{ wall.code }}</h1>
-    </header>
+    <div class="pull-right">
+    	<a href="#" class="brand">{{ box.box_name }} | {{ wall.code }}</a>
+        <nav class="nav btn-group">
+            <a href="http://http://points.kolabria.com/settings" class="settings btn"><i class="icon-cog"></i></a>
+            <a href="/walls/reset/{{ box.box_id }}" class="clear btn"><i class="icon-trash"></i></a>
+        </nav>
+    </div>
+</header>
 {% endblock navbar %}
 
 {% block content %}
@@ -38,37 +64,6 @@
         </div>
         <div class="btn-group">
             <button type="button" onclick="" value="ZoomIn" class="btn tool"><i class="icon-plus"></i></button><button type="button" onclick="" value="Center" class="btn tool"><i class="icon-asterisk"></i></button><button type="button" onclick="" value="ZoomOut" class="btn tool"><i class="icon-minus"></i></button>
-        </div>
-    </div>
-    <div id="shareTo" class="modal fade">
-        <div class="modal-header">
-            <button data-dismiss="modal" class="close">x</button>
-            <h3>Share Wall {Pin Number}</h3>
-        </div>
-        <div class="modal-body">
-            <ul>
-                {% for bid in sharing %}
-                <li data-value="{{ bid }}" class="btn"><span>{{ bid }}</span><i></i></li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    <div id="walls" class="modal fade">
-        <div class="modal-header">
-            <button data-dismiss="modal" class="close">x</button>
-            <h3>Available Walls</h3>
-        </div>
-        <div class="modal-body">
-            <ul></ul>
-        </div>
-    </div>
-    <div id="users" class="modal fade">
-        <div class="modal-header">
-            <button data-dismiss="modal" class="close">x</button>
-            <h3>Online Users</h3>
-        </div>
-        <div class="modal-body">
-            <ul></ul>
         </div>
     </div>
     <div id="alerts"></div>
