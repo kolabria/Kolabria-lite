@@ -70,16 +70,15 @@
                <form action="." method="post" class="form-horizontal">
                   {% csrf_token %}
                   {% for field in shareform %}
-                  <td>{{ field }}</td>
+                  <td colspan="2">{{ field }}</td>
                   <td><input type="submit" value="Add" class="btn btn-primary btn-small"></input></td>
                   {% endfor %}
                </form>
              </tr>
-             <tr>
-                 <td>{{ field.errors }}</td>
-             </tr>
+                 
             </tbody>
           </table>
+          {{ field.errors }}
 			    <a href="/devices/" class="btn">Back</a>
           </div><!--/span-->
       </div>
