@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Kolabria - My Appliances</title>
+    Kolabria - My Appliances
 {% endblock %}
 
 {% block content %}
@@ -26,7 +26,7 @@
         <br/>
         <table class="table">
           <thead>
-            <tr class="offset1">
+            <tr>
               <th>Device ID</th>
               <th>Device Name</th>
               <th>Edit</th>
@@ -35,7 +35,7 @@
           </thead>
           <tbody>
               {% for box in boxes %}
-            <tr class="span4">
+            <tr>
               <td>{{ box.box_id }}</td>
               <td>{{ box.box_name }}</td>
               <td><a class="btn" href="/devices/edit/{{ box.box_id }}">edit</button></td>
@@ -50,13 +50,12 @@
                 <td>{{ field }}</td>
                 {% endfor %}
               <td><input type="submit" value="Add" class="btn btn-primary btn-small"></input></td>
-            </tr>
-              <tr>
-                <td>{{ field.errors }}</td>
-              </tr>
+              <td></td>
               </form>
+            </tr>
            </tbody>
          </table>
+         {{ field.errors }}
       </div><!--/span-->
     </div><!--/row-->
 {% endblock content %}
