@@ -25,22 +25,23 @@
                <tr>
                  <th>Device ID</th>
                  <th>Room Name</th>
+                 <th>Update Room Name</th>
                  <th></th>
                </tr>
              </thead>
              <tbody>
-               <td>{{ box.box_id }}</td>
-               <td>{{ box.box_name }}</td>
-               <td>
-                 <form action="." method="post" class="form-horizontal">
+             	<tr>
+             	 <form action="." method="post" class="form-horizontal">
+               	    <td>{{ box.box_id }}</td>
+               	    <td>{{ box.box_name }}</td>
                     {% csrf_token %}
                     {% for field in editform %}
                     <td>{{ field }}</td>
                     <td>{{ field.errors }}</td>
                     <td><input type="submit" value="Update" class="btn btn-primary btn-small"></input></td>
                     {% endfor %}
-                 </form>
-               </td>
+               </form>
+               </tr>
              </tbody>
            </table>
          </div>
