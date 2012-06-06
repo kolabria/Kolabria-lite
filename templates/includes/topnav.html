@@ -16,7 +16,7 @@
             </ul>
  
          {% if user.is_authenticated %}
-         <p class="navbar-text pull-right">Logged in as <a href="#">{{ user.username }}</a> | <a href="/logout/">Logout</button></a>
+         <p class="navbar-text pull-right">Logged in as <a href="#">{{ user.username }}</a> | <a href="/logout/">Logout</a></p>
          {% else %}
  				<div class="btn-group offset10">
 					<a class="btn btn-primary" href="/login/">Login or Register</a>
