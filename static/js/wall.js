@@ -384,13 +384,10 @@ now.ready(function(){
     }else if(/.*share.*/.test(cl)){
       switch(t){
         case 'Share':
-          jQuery('#shareTo').modal({});
           break;
         case 'Shared':
-          jQuery('#walls').modal({});
           break;
         case 'Users':
-          jQuery('#users').modal({});
           break;
       }
     }else{
