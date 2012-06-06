@@ -35,14 +35,14 @@
                	    <td>{{ box.box_name }}</td>
                     {% csrf_token %}
                     {% for field in editform %}
-                    <td>{{ field }}</td>
-                    <td>{{ field.errors }}</td>
+                    <td>{{ field }}</td>                    
                     <td><input type="submit" value="Update" class="btn btn-primary btn-small"></input></td>
                     {% endfor %}
                </form>
                </tr>
              </tbody>
            </table>
+           {{ field.errors }}
       </div> 
 
       <div class="row-fluid">
