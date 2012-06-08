@@ -233,6 +233,28 @@ def auth_host(request):
     return HttpResponseRedirect('/')
 
 
+def connect2host(request, host_id):
+    user_agent = request.META['HTTP_USER_AGENT']
+    valid_agent = user_agent.find('WWA')
+    data = {'title': 'Kolabria - Valid Appliance ',}
+    if valid_agent != '-1':
+        box_id = user_agent[valid_agent:]
+        try:
+            box = Box.objects.get(box_id__iexact=host_id)
+            wid = box.active_wall
+            wall = Wall.objects.get(id=wid)
+            request.session['auth'] = True
+            request.session['wid'] = wid
+            return HttpResponseRedirect('/receiver/wikiwall/%s' % box.box_id)
+        except Box.DoesNotExist:
+            messages.error(request, 'Appliance %s not recognized' % box_id)
+            return HttpResponseRedirect('/')
+    messages.error(request, 'Access to url /box/ Unauthorized')
+    return HttpResponseRedirect('/')
+
+
+
+
 def auth_receiver(request):
     user_agent = request.META['HTTP_USER_AGENT']
     valid_agent = user_agent.find('WWA')

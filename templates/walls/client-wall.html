@@ -35,7 +35,8 @@
     </nav>
     <div class="pull-right">
     	<a href="#" class="brand">{{ box.box_name }} | {{ wall.code }}</a>
-        <nav class="nav btn-group">
+        <nav id="functions" class="nav btn-group">
+            <button class="btn tool" type="button" onclick="" value="Export"><i class="icon-download-alt"></i></button>
             <a href="/wikiwall/thank-you/" class="quit btn pull-right"><i class="icon-off"></i></a>    
         </nav>
     </div>
@@ -64,6 +65,8 @@
     </script>
     <script src="http://points.kolabria.com/javascripts/paper.js"></script>
     <script src="http://points.kolabria.com/javascripts/touch-punch.min.js"></script>
+    <script src="http://points.kolabria.com/javascripts/canvas-toBlob.min.js"></script>
+    <script src="http://points.kolabria.com/javascripts/FileSaver.min.js"></script>
     <script src="{{ STATIC_URL }}js/jquery-ui-1.8.20.min.js"></script>
     <script src="http://points.kolabria.com/nowjs/now.js"></script><!--this is what allows realtime communication -->
     <script src="{{ STATIC_URL }}js/wall.js" canvas="myCanvas" type="text/paperscript"></script>

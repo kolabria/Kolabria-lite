@@ -17,4 +17,5 @@ urlpatterns = patterns('',
     url(r'^wikiwall/(?P<box_id>\w+)/$', views.wikiwall),
     url(r'^host/wikiwall/(?P<box_id>\w+)/$', views.host_wall), 
     url(r'^receiver/wikiwall/(?P<host_id>\w+)/$', views.receiver_wall),
+    url(r'^connect/(?P<host_id>\w+)/$', views.connect2host),
 )
