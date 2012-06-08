@@ -12,7 +12,7 @@ now.ready(function(){
       }
       if(shares){
         for(i = 0; i < shares.length; i++){
-          jQuery('#walls').find('ul').append('<li class="'+shares[i].id+'"><a href="/receiver/wikiwall/'+shares[i].id+'">'+shares[i].name+'</a></li>');
+          jQuery('#walls').find('ul').append('<li class="'+shares[i].id+'"><a href="/connect/'+shares[i].id+'">'+shares[i].name+'</a></li>');
         }
       }
     });
@@ -22,12 +22,15 @@ now.ready(function(){
   var color = 'black';
   var width = 2;
 
-  var worker = new Worker('/static/js/worker.js');
+  var worker = new Worker('/javascripts/worker.js');
   worker.addEventListener('message', function(e){
     pen.path.add(e.data);
     now.shareUpdateDraw(e.data,paper.project.activeLayer.index);
   }, false);
-  //helper functions
+
+  /******** HELPER FUNCTIONS *******/
+
+  //Serialize for save
   var serializePath = function(path){
     var segs = new Array();
     x = path
@@ -48,7 +51,99 @@ now.ready(function(){
     return segs
   }
 
-  //NOW functions
+  //Alerts
+  gAlert = function(message){
+    jQuery('<div class="alert fade in">'+message+'</div>')
+      .appendTo('#alerts')
+      .delay(2000).slideUp(300, function(){
+        $(this).detach();
+      })
+  }
+
+  //Convert Canvas to SVG
+  exportCanvas = function(){
+    var canvas = document.getElementById("myCanvas"), ctx = canvas.getContext("2d");
+    var w = canvas.width;
+    var h = canvas.height;
+    var data;
+    //store the current globalCompositeOperation
+    var compositeOperation = ctx.globalCompositeOperation;
+    //get the current ImageData for the canvas.
+    data = ctx.getImageData(0, 0, w, h);
+    //set to draw behind current content
+    ctx.globalCompositeOperation = "destination-over";
+    //set background color
+    ctx.fillStyle = 'white';
+    //draw background / rect on entire canvas
+    ctx.fillRect(0,0,w,h);
+    ctx.globalCompositeOperation = compositeOperation;
+    canvas.toBlob(function(blob) {
+      saveAs(blob, wallId+".png");
+    });
+  }
+  
+  scrollNav = function(){
+    c.addClass('nav');
+    nw.show();
+    var windowTop = paper.view.bounds.top;
+    var windowRight = paper.view.bounds.right;
+    var windowBottom = paper.view.bounds.bottom;
+    var windowLeft = paper.view.bounds.left;
+    var paperTop = paper.project.activeLayer.bounds.top;
+    var paperRight = paper.project.activeLayer.bounds.right;
+    var paperBottom = paper.project.activeLayer.bounds.bottom;
+    var paperLeft = paper.project.activeLayer.bounds.left;
+    var navTop = Math.min(windowTop,paperTop);
+    var navRight = Math.max(windowRight, paperRight);
+    var navBottom = Math.max(windowBottom, paperBottom);
+    var navLeft = Math.min(windowLeft, paperLeft);
+    var windowLength = paper.view.bounds.width;
+    var windowHeight = paper.view.bounds.height;
+    var navLength = navRight - navLeft
+    var navHeight = navBottom - navTop
+    var rLength = navLength / 200;
+    var rHeight = navHeight / 150;           
+    var canvas
+              
+    var originalPosition = {
+      top  : false,
+      left : false
+    }
+
+    jQuery('#view')
+      .width(windowLength / rLength)
+      .height(windowHeight / rHeight)
+      .css({
+        top : (windowTop-navTop)/rHeight,
+        left : (windowLeft-navLeft)/rLength
+      })
+      .draggable({
+        containment:"parent",
+        drag: function(event, ui){
+          if(originalPosition.left === false && originalPosition.top === false){
+            originalPosition.left = ui.originalPosition.left
+            originalPosition.top = ui.originalPosition.top
+          }
+          offsetLeft = ui.position.left - originalPosition .left
+          offsetTop = ui.position.top - originalPosition.top
+          originalPosition.left = ui.position.left 
+          originalPosition.top = ui.position.top  
+          pan.v = new Point()
+          pan.v.x = offsetLeft * rLength * paper.view.zoom;
+          pan.v.y = offsetTop * rHeight * paper.view.zoom;
+          paper.view.scrollBy(pan.v)
+          paper.view.draw();
+        },
+        stop: function(event, ui){
+          originalPosition.left = false;
+          originalPosition.top = false;
+        }
+      });
+  }
+
+
+  /******** NOW functions *******/
+
   //populate the canvas
   now.initWall(function(d, users){
     //convert database info into paperjs object
@@ -92,7 +187,7 @@ now.ready(function(){
     window.location = jQuery('#toolbar').find('.quit').attr('href');
   }
   now.share = function(host, name){
-    jQuery('#walls').find('ul').append('<li class="'+host+'"><a href="/receiver/wikiwall/'+host+'">'+name+'</a></li>');
+    jQuery('#walls').find('ul').append('<li class="'+host+'"><a href="/connect/'+host+'">'+name+'</a></li>');
     //add this share to the list of shares.
     gAlert(name + ' Has shared a wall with you');
   }
@@ -103,14 +198,6 @@ now.ready(function(){
   }
   now.sharedTo = function(box){
     jQuery('#shareTo').find('[value='+k+']').addClass('active');
-  }
-
-  gAlert = function(message){
-    jQuery('<div class="alert fade in">'+message+'</div>')
-      .appendTo('#alerts')
-      .delay(2000).slideUp(300, function(){
-        $(this).detach();
-      })
   }
 
   //Start of drawing
@@ -154,7 +241,10 @@ now.ready(function(){
   now.tError = function(err){
     alert(err);
   }
-  //Tool Definitions
+
+
+  /****** Tool Definitions ********/
+
   tool.distanceThreshhold = 10;
   //Pen Tool
   var pen = new Tool();
@@ -224,7 +314,8 @@ now.ready(function(){
     }
   }
 
-  //Event listeners
+  /******** Event listeners ******/
+
   //keymap
   jQuery(document).keydown(function(event){
     switch (event.which) {
@@ -264,64 +355,7 @@ now.ready(function(){
     }
   });
 
-  scrollNav = function(){
-    c.addClass('nav');
-    nw.show();
-    var windowTop = paper.view.bounds.top;
-    var windowRight = paper.view.bounds.right;
-    var windowBottom = paper.view.bounds.bottom;
-    var windowLeft = paper.view.bounds.left;
-    var paperTop = paper.project.activeLayer.bounds.top;
-    var paperRight = paper.project.activeLayer.bounds.right;
-    var paperBottom = paper.project.activeLayer.bounds.bottom;
-    var paperLeft = paper.project.activeLayer.bounds.left;
-    var navTop = Math.min(windowTop,paperTop);
-    var navRight = Math.max(windowRight, paperRight);
-    var navBottom = Math.max(windowBottom, paperBottom);
-    var navLeft = Math.min(windowLeft, paperLeft);
-    var windowLength = paper.view.bounds.width;
-    var windowHeight = paper.view.bounds.height;
-    var navLength = navRight - navLeft
-    var navHeight = navBottom - navTop
-    var rLength = navLength / 200;
-    var rHeight = navHeight / 150;           
-    var canvas
-              
-    var originalPosition = {
-      top  : false,
-      left : false
-    }
-
-    jQuery('#view')
-      .width(windowLength / rLength)
-      .height(windowHeight / rHeight)
-      .css({
-        top : (windowTop-navTop)/rHeight,
-        left : (windowLeft-navLeft)/rLength
-      })
-      .draggable({
-        containment:"parent",
-        drag: function(event, ui){
-          if(originalPosition.left === false && originalPosition.top === false){
-            originalPosition.left = ui.originalPosition.left
-            originalPosition.top = ui.originalPosition.top
-          }
-          offsetLeft = ui.position.left - originalPosition .left
-          offsetTop = ui.position.top - originalPosition.top
-          originalPosition.left = ui.position.left 
-          originalPosition.top = ui.position.top  
-          pan.v = new Point()
-          pan.v.x = offsetLeft * rLength * paper.view.zoom;
-          pan.v.y = offsetTop * rHeight * paper.view.zoom;
-          paper.view.scrollBy(pan.v)
-          paper.view.draw();
-        },
-        stop: function(event, ui){
-          originalPosition.left = false;
-          originalPosition.top = false;
-        }
-      });
-  }
+  
   //delete
   jQuery(document).on('click','.delete-object',function(){ 
     if(select.target.item.remove()){
@@ -330,6 +364,8 @@ now.ready(function(){
     }
     now.sendDeleteItem(paper.project.activeLayer.index,select.target.item.name);
   });
+
+  //Share To
   jQuery('#shareTo li').click(function(e){
     e.stopImmediatePropagation(); //Two clicks are fired, this is a patch, need to find reason why.
     var li = jQuery(this);
@@ -339,8 +375,9 @@ now.ready(function(){
       li.find('i').addClass('icon-ok')
     }
   })
+
   //Change tool or color
-  jQuery('#toolbar').add('#navWindow').click(function(e){
+  jQuery('#toolbar').add('#navWindow').add('#functions').click(function(e){
     var obj = jQuery(e.target);
     var t = obj.attr('value');
     var cl = obj.attr('class');
@@ -377,17 +414,24 @@ now.ready(function(){
           view.scrollBy(p);
           view.draw(); 
           break;
+        case 'Export':
+          alert('save')
+          exportCanvas();
+          break;
       }
     }else if(/.*color.*/.test(cl)){
       color = t
       jQuery('.tool[value=Pen]').click();
     }else if(/.*share.*/.test(cl)){
       switch(t){
-        case 'Share':
+        case 'Share': 
+          //no longer needed handled via CSS, call kept incase of additional functionality       
           break;
         case 'Shared':
+          //no longer needed handled via CSS, call kept incase of additional functionality
           break;
         case 'Users':
+          //no longer needed handled via CSS, call kept incase of additional functionality
           break;
       }
     }else{
