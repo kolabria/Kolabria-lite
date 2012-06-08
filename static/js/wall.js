@@ -22,7 +22,7 @@ now.ready(function(){
   var color = 'black';
   var width = 2;
 
-  var worker = new Worker('/js/worker.js');
+  var worker = new Worker('/static/js/worker.js');
   worker.addEventListener('message', function(e){
     pen.path.add(e.data);
     now.shareUpdateDraw(e.data,paper.project.activeLayer.index);
