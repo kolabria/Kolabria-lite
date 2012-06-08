@@ -37,9 +37,10 @@ def appliances(request):
             messages.error(request, 'Error: Device already registered with box_id: %s' % box_id)
             return HttpResponseRedirect('/devices/')
         else:
-            new_box = Box.objects.create(company=profile.company, owner=request.user,
-                                     box_id=box_id, box_name=box_name, 
-                                     active_wall=str(new_wall.id))
+            new_box = Box.objects.create(company=profile.company,
+                                         owner=request.user,
+                                         box_id=box_id, box_name=box_name,
+                                         active_wall=str(new_wall.id))
             new_box.save()
             msg = '%s %s %s' % (new_box.box_id, new_box.box_name,
                                 profile.company.company) 
@@ -122,6 +123,9 @@ def host_wall(request, box_id):
     else:
         wall = Wall.objects.get(id=request.session['wid'])
         box = Box.objects.get(box_id=box_id)
+        box.active_wall = str(wall.id)
+        box.save()
+        request.session['bid'] = str(box.id)
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, 
@@ -131,18 +135,19 @@ def host_wall(request, box_id):
                                   context_instance=RequestContext(request))
 
 
-def receiver_wall(request, box_id):
+def receiver_wall(request, host_id):
     if 'auth' not in request.session:
         messages.warning(request, 'Error: Not Authorized')
         return HttpResponseRedirect('/join/')
     else:
-        wall = Wall.objects.get(id=request.session['wid'])
-        box = Box.objects.get(box_id=box_id)
+        box = Box.objects.get(box_id=host_id)
+        wall = Wall.objects.get(id=box.active_wall)
+        client = Box.objects.get(id=request.session['bid']).box_name
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
-                'box': box, 
-                'sharing': box.sharing,
-                'client': box.box_name, }
+                'box': box,
+                'client': client, # my default box_name
+                }
         return render_to_response('walls/receiver-wall.html', data, 
                                   context_instance=RequestContext(request))
 
@@ -212,8 +217,6 @@ def auth_host(request):
     valid_agent = user_agent.find('WWA')
     data = {'title': 'Kolabria - Valid Appliance ',}
     if valid_agent != '-1':
-#    if user_agent[:3] == 'WWA' or 'wwa':
-#        box_id = user_agent
         box_id = user_agent[valid_agent:]
         try:
             box = Box.objects.get(box_id__iexact=box_id)
@@ -221,6 +224,7 @@ def auth_host(request):
             wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
             request.session['wid'] = wid
+            request.session['host_id'] = str(box.id)
             return HttpResponseRedirect('/host/wikiwall/%s' % box.box_id)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)
@@ -229,16 +233,36 @@ def auth_host(request):
     return HttpResponseRedirect('/')
 
 
+def connect2host(request, host_id):
+    user_agent = request.META['HTTP_USER_AGENT']
+    valid_agent = user_agent.find('WWA')
+    data = {'title': 'Kolabria - Valid Appliance ',}
+    if valid_agent != '-1':
+        box_id = user_agent[valid_agent:]
+        try:
+            box = Box.objects.get(box_id__iexact=host_id)
+            wid = box.active_wall
+            wall = Wall.objects.get(id=wid)
+            request.session['auth'] = True
+            request.session['wid'] = wid
+            return HttpResponseRedirect('/receiver/wikiwall/%s' % box.box_id)
+        except Box.DoesNotExist:
+            messages.error(request, 'Appliance %s not recognized' % box_id)
+            return HttpResponseRedirect('/')
+    messages.error(request, 'Access to url /box/ Unauthorized')
+    return HttpResponseRedirect('/')
+
+
+
+
 def auth_receiver(request):
     user_agent = request.META['HTTP_USER_AGENT']
     valid_agent = user_agent.find('WWA')
     data = {'title': 'Kolabria - Valid Appliance ',}
     if valid_agent != '-1':
-#    if user_agent[:3] == 'WWA' or 'wwa':
         box_id = user_agent[valid_agent:]
-#        box_id = user_agent
         try:
-            box = Box.objects.get(box_id__iexact=box_id)
+            box = Box.objects.get(box_id__iexact=request.session['host_id'])
             wid = box.active_wall
             wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
