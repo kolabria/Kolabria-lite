@@ -180,7 +180,7 @@ now.ready(function(){
     users = jQuery('#users').find('.'+clientId);
     if (users.length){
       jQuery(users).detach()
-      gAlert(username + 'Has Left the chat');
+      gAlert(username + ' has Left the chat');
     }
   }
   now.quit = function(){
@@ -189,7 +189,7 @@ now.ready(function(){
   now.share = function(host, name){
     jQuery('#walls').find('ul').append('<li class="'+host+'"><a href="/receiver/wikiwall/'+host+'">'+name+'</a></li>');
     //add this share to the list of shares.
-    gAlert(name + ' Has shared a wall with you');
+    gAlert(name + ' has shared a wall with you');
   }
   now.unshare = function(host){
     //find box in shares with that id and remove it.
