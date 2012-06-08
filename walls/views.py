@@ -83,8 +83,9 @@ def restore_box(request, box_id):
     Restores Receiver Device to default (own) active wall.
     """
     box = Box.objects.get(box_id=box_id)
-    wid = box.active_wall
-    wall = Wall.objects.get(id=wid)
+    box.active_wall = str(box.id)
+    box.save()
+    wall = Wall.objects.get(id=box.active_wall)
     wall.delete()
 
     msg = 'Restore appliance -- not yet implemented'
