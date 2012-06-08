@@ -75,9 +75,9 @@
     <script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>
     {% endblock js %}    
     <script>
-      iOS_disableZooming();
-      iOS_disableScrolling();
-      window.onorientationchange = function(){
+      //iOS_disableZooming();
+      // iOS_disableScrolling();
+       window.onorientationchange = function(){
         if ( orientation == 0 || orientation == 180) {
           window.scrollTo(0,1);
         }  
