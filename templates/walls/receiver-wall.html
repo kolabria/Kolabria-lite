@@ -77,4 +77,8 @@
     <script src="{{ STATIC_URL }}js/jquery-ui-1.8.20.min.js"></script>
     <script src="http://points.kolabria.com/nowjs/now.js"></script><!--this is what allows realtime communication -->
     <script src="{{ STATIC_URL }}js/wall.js" canvas="myCanvas" type="text/paperscript"></script>
+    <script>
+      iOS_disableZooming();
+      iOS_disableScrolling();
+    </script>
 {% endblock morejs %}
