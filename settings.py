@@ -20,8 +20,8 @@ AUTHENTICATION_BACKENDS = (
 AUTH_PROFILE_MODULE = 'login.UserProfile'
 
 # Database settings
-connect('kolabria-new')
-#connect('kolabria-324342')
+#connect('kolabria-new')
+connect('kolabria-x100')
 
 
 DEBUG = True

@@ -122,6 +122,13 @@ def host_wall(request, box_id):
     else:
         wall = Wall.objects.get(id=request.session['wid'])
         box = Box.objects.get(box_id=box_id)
+<<<<<<< Updated upstream
+=======
+        box.active_wall = str(wall.id)
+        box.save()
+        request.session['bid'] = str(box.id)
+        request.session['my_wall'] = box.active_wall
+>>>>>>> Stashed changes
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
                 'wall': wall,
                 'box': box, 
@@ -136,6 +143,7 @@ def receiver_wall(request, box_id):
         messages.warning(request, 'Error: Not Authorized')
         return HttpResponseRedirect('/join/')
     else:
+<<<<<<< Updated upstream
         wall = Wall.objects.get(id=request.session['wid'])
         box = Box.objects.get(box_id=box_id)
         data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
@@ -143,6 +151,20 @@ def receiver_wall(request, box_id):
                 'box': box, 
                 'sharing': box.sharing,
                 'client': box.box_name, }
+=======
+        box = Box.objects.get(box_id=host_id)
+        wall = Wall.objects.get(id=box.active_wall)
+#        own_wall = Wall.objects.get(id=request.session['bid'])
+        home_box = Box.objects.get(id=request.session['bid'])
+        client = Box.objects.get(id=request.session['bid']).box_name
+        data = {'title': 'Kolabria - Viewing Wall %s' % wall.box_id,
+                'wall': wall,
+                'box': box,
+                'client': client, # my default box_name
+#                'my_wall': own_wall,
+                'home_box': home_box.box_id,
+                }
+>>>>>>> Stashed changes
         return render_to_response('walls/receiver-wall.html', data, 
                                   context_instance=RequestContext(request))
 
@@ -196,10 +218,8 @@ def auth_box(request):
         box_id = user_agent
         try:
             box = Box.objects.get(box_id__iexact=box_id)
-            wid = box.active_wall
-            wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
-            request.session['wid'] = wid
+            request.session['bid'] = str(box.id)
             return HttpResponseRedirect('/wikiwall/%s' % box.box_id)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)
@@ -217,10 +237,12 @@ def auth_host(request):
         box_id = user_agent[valid_agent:]
         try:
             box = Box.objects.get(box_id__iexact=box_id)
-            wid = box.active_wall
-            wall = Wall.objects.get(id=wid)
             request.session['auth'] = True
+<<<<<<< Updated upstream
             request.session['wid'] = wid
+=======
+            request.session['bid'] = str(box.id)
+>>>>>>> Stashed changes
             return HttpResponseRedirect('/host/wikiwall/%s' % box.box_id)
         except Box.DoesNotExist:
             messages.error(request, 'Appliance %s not recognized' % box_id)

@@ -78,26 +78,16 @@ def reset_box(request, box_id):
     return HttpResponseRedirect('/host/')
 
 
-def restore_box(request, home_box_id):
+def restore_box(request, my_bid):
     """
     To be called from Receiver Device.
     Restores Receiver Device to default (own) active wall.
     """
-<<<<<<< Updated upstream
-    box = Box.objects.get(box_id=box_id)
-    wid = box.active_wall
-    wall = Wall.objects.get(id=wid)
-    wall.delete()
-
-    msg = 'Restore appliance -- not yet implemented'
-    messages.success(request, msg)
-=======
     ipdb.set_trace()
-    box = Box.objects.get(box_id=home_box_id)
+    box = Box.objects.get(box_id=my_bid)
     box.active_wall = request.session['my_wall']
     box.save()
     wall = Wall.objects.get(id=box.active_wall)
->>>>>>> Stashed changes
     return HttpResponseRedirect('/host/')
 
 
