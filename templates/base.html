@@ -77,7 +77,15 @@
     <script>
       //iOS_disableZooming();
       // iOS_disableScrolling();
-       window.onorientationchange = function(){
+      
+      //Analytics
+      var _gaq=[['_setAccount','UA-32675686-1'], ['_setDomainName', 'kolabria.com'], ['_trackPageview']];
+      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g,s)}(document,'script'));
+    
+      //Mobile orientation fix
+      window.onorientationchange = function(){
         if ( orientation == 0 || orientation == 180) {
           window.scrollTo(0,1);
         }  
